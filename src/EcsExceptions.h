@@ -1,0 +1,138 @@
+#pragma once
+
+#include "GameObject.h"
+#include "EngineException.h"
+
+namespace OSK::ECS {
+
+	/// @brief Excepción que ocurre cuando se trata de operar sobre un objeto que no existe.
+	class OSKAPI_CALL InvalidObjectException : public EngineException {
+
+	public:
+
+		/// @brief Excepción que ocurre cuando se trata de registrar
+		/// un componente que ya ha sido previamente registrado.
+		/// @param componentName Nombre del componente.
+		explicit InvalidObjectException(
+			GameObjectIndex obj,
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("InvalidObjectException: El objeto {} no existe.", obj.Get()),
+				location) { }
+
+	};
+
+	/// @brief Excepción que se da cuando se trata de operar sobre un componente de
+	/// un objeto que no tiene dicho componente.
+	class OSKAPI_CALL ComponentNotFoundException : public EngineException {
+
+	public:
+
+		/// @brief Excepción que se da cuando se trata de operar sobre un componente de
+		/// un objeto que no tiene dicho componente.
+		/// @param componentName Nombre del componente.
+		/// @param obj ID del objeto que debería tener el componente.
+		ComponentNotFoundException(
+			std::string_view componentName,
+			GameObjectIndex obj,
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("El objeto {} no contiene el componente {}.", obj.Get(), componentName),
+				location) {}
+
+	};
+
+	/// @brief Excepción que ocurre cuando se trata de registrar
+	/// un componente que ya ha sido previamente registrado.
+	class OSKAPI_CALL ComponentNotRegisteredException : public EngineException {
+
+	public:
+
+		/// @param componentName Nombre del componente.
+		explicit ComponentNotRegisteredException(
+			std::string_view componentName,
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("El componente {} no ha sido registrado.", componentName),
+				location) { }
+
+	};
+
+	/// @brief Excepción que ocurre cuando se trata de añadir un componente a un objeto
+	/// que ya tiene un componente del tipo dado.
+	/// @see ErrorCode::ECS_0002_OBJECT_ALREADY_HAS_COMPONENT.
+	class OSKAPI_CALL ObjectAlreadyHasComponentException : public EngineException {
+
+	public:
+
+		/// @brief Excepción que ocurre cuando se trata de añadir un componente a un objeto
+		/// que ya tiene un componente del tipo dado.
+		/// @param componentName Nombre del componente.
+		/// @param object ID del objeto que ya tiene el componente.
+		ObjectAlreadyHasComponentException(
+			std::string_view componentName,
+			GameObjectIndex object,
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("El objeto {} ya contiene un componente del tipo {}.", object.Get(), componentName),
+				location) {}
+
+	};
+
+	/// @brief Excepción que ocurre cuando se trata de registrar
+	/// un componente que ya ha sido previamente registrado.
+	/// @see ErrorCode::ECS_0001_COMPONENT_ALREADY_REGISTERED.
+	class OSKAPI_CALL ComponentAlreadyRegisteredException : public EngineException {
+
+	public:
+
+		/// @brief Excepción que ocurre cuando se trata de registrar
+		/// un componente que ya ha sido previamente registrado.
+		/// @param componentName Nombre del componente.
+		explicit ComponentAlreadyRegisteredException(
+			std::string_view componentName,
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("El componente {} ya ha sido registrado.", componentName),
+				location) { }
+
+	};
+
+	/// @brief Excepción que se da cuando se trata de operar sobre un sistema que no
+	/// ha sido registrado.
+	class OSKAPI_CALL SystemNotFoundException : public EngineException {
+
+	public:
+
+		SystemNotFoundException(
+			std::string_view systemName,
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("SystemNotFoundException: El sistema {} no está registrado.", systemName),
+				location) {}
+
+	};
+
+
+	/// @brief Excepción que se da cuando se trata de insertar un sistema que genera una dependencia cíclica.
+	class OSKAPI_CALL SystemCyclicDependencyException : public EngineException {
+
+	public:
+
+		SystemCyclicDependencyException(
+			std::string_view systemName,
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("SystemCyclicDependencyException: El sistema {} genera una dependencia cíclica.", systemName),
+				location) {}
+
+	};
+
+}

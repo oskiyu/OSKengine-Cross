@@ -1,0 +1,168 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/bin",
+      "installDir": "$env{OSK_ENGINE_SDK_PATH}/2027_01_00/",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": {
+          "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+          "type": "FILEPATH"
+        },
+        "EXTRA_DEFINES": "SPIRV_REFLECT_USE_SYSTEM_SPIRV_H",
+        "CMAKE_POLICY_VERSION_MINIMUM": "3.5"
+      }
+    },
+
+    {
+      "name": "base-linux",
+      "hidden": true,
+      "inherits": "base",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-linux",
+        "VULKAN_SDK": "$env{VULKAN_SDK}",
+        "OSK_PLATFORM": "OSK_LINUX",
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++",
+        "CMAKE_BUILD_WITH_INSTALL_RPATH":  "ON"
+      }
+    },
+
+    {
+      "name": "linux-deb",
+      "inherits": "base-linux",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "OSK_DEBUG": true
+      }
+    },
+    {
+      "name": "linux-rel",
+      "inherits": "base-linux",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "OSK_DEBUG": false
+      }
+    },
+
+    {
+      "name": "base-android",
+      "hidden": true,
+      "inherits": "base",
+      "cacheVariables": {
+        "OSK_PLATFORM": "OSK_ANDROID",
+        "VCPKG_TARGET_TRIPLET": "arm64-android",
+        "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": {
+          "value": "$env{ANDROID_NDK}/build/cmake/android.toolchain.cmake",
+          "type": "FILEPATH"
+        },
+        "ANDROID_PLATFORM": "34",
+        "ANDROID_ABI": "arm64-v8a",
+        "ANDROID_STL": "c++_shared",
+        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
+        "ANDROID": "ON",
+        "VULKAN_SDK": "$env{VULKAN_SDK}",
+        "CMAKE_C_COMPILER": "clang-cl.exe",
+        "CMAKE_CXX_COMPILER": "clang-cl.exe",
+        "CMAKE_FIND_ROOT_PATH_MODE_PACKAGE": "BOTH",
+        "OSK_ANDROID_SDK": "$env{ANDROID_SDK}",
+        "OSK_ANDROID_NDK": "$env{ANDROID_NDK}"
+      }
+    },
+
+    {
+      "name": "android-deb",
+      "inherits": "base-android",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "OSK_DEBUG": true
+      }
+    },
+
+    {
+      "name": "android-rel",
+      "inherits": "base-android",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "OSK_DEBUG": false
+      }
+    },
+
+    {
+      "name": "base-windows",
+      "hidden": true,
+      "inherits": "base",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-windows",
+        "OSK_PLATFORM": "OSK_WINDOWS",
+        "VULKAN_SDK": "$env{VULKAN_SDK}",
+        "CMAKE_C_COMPILER": "cl.exe",
+        "CMAKE_CXX_COMPILER": "cl.exe"
+      }
+    },
+
+    {
+      "name": "windows-deb",
+      "inherits": "base-windows",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "OSK_DEBUG": true
+      }
+    },
+    {
+      "name": "windows-rel",
+      "inherits": "base-windows",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "OSK_DEBUG": false
+      }
+    }
+  ],
+
+
+  "buildPresets": [
+    {
+      "name": "linux-deb",
+      "displayName": "Linux (debug)",
+      "configurePreset": "linux-deb"
+    },
+    {
+      "name": "linux-rel",
+      "displayName": "Linux (release)",
+      "configurePreset": "linux-rel"
+    },
+
+    {
+      "name": "android-deb",
+      "displayName": "Android (debug)",
+      "configurePreset": "android-deb"
+    },
+    {
+      "name": "android-rel",
+      "displayName": "Android (release)",
+      "configurePreset": "android-rel"
+    },
+
+    {
+      "name": "windows-deb",
+      "displayName": "Windows (debug)",
+      "configurePreset": "windows-deb"
+    },
+    {
+      "name": "windows-rel",
+      "displayName": "Windows (release)",
+      "configurePreset": "windows-rel"
+    }
+  ]
+}

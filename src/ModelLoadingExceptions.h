@@ -1,0 +1,186 @@
+#pragma once
+
+#include "EngineException.h"
+
+namespace OSK::ASSETS {
+
+	/// @brief Excepción que se lanza cuando no se consiguen encontrar las posiciones de los vértices
+	/// de un modelo 3D
+	/// Asegúrese de que el modelo 3D contiene información de posición de vértices.
+	class OSKAPI_CALL NoVertexPositionsFoundException : public EngineException {
+
+	public:
+
+		explicit NoVertexPositionsFoundException(
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("NoVertexPositionsFoundException: El archivo del modelo 3D no contiene posiciones."),
+				location) { }
+
+	};
+
+	/// @brief Excepción que se lanza cuando no se consiguen encontrar las normales de los vértices
+	/// de un modelo 3D
+	/// Asegúrese de que el modelo 3D contiene información de normales de vértices.
+	class OSKAPI_CALL NoVertexNormalsFoundException : public EngineException {
+
+	public:
+
+		explicit NoVertexNormalsFoundException(
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("NoVertexNormalsFoundException: El archivo del modelo 3D no contiene normales."),
+				location) { }
+
+	};
+
+	/// @brief Excepción que se lanza cuando no se consiguen encontrar las tangentes de los vértices
+	/// de un modelo 3D
+	/// Asegúrese de que el modelo 3D contiene información de tangentes de vértices.
+	class OSKAPI_CALL NoVertexTangentsFoundException : public EngineException {
+
+	public:
+
+		explicit NoVertexTangentsFoundException(
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("NoVertexTangentsFoundException: El archivo del modelo 3D no contiene tangentes."),
+				location) { }
+
+	};
+
+	/// @brief Excepción que se lanza cuando no se consiguen encontrar las coordenadas de texturas de los vértices
+	/// de un modelo 3D
+	/// Asegúrese de que el modelo 3D contiene información de coordenadas de texturas de vértices.
+	class OSKAPI_CALL NoVertexTexCoordsFoundException : public EngineException {
+
+	public:
+
+		explicit NoVertexTexCoordsFoundException(
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("NoVertexTexCoordsFoundException: El archivo del modelo 3D no contiene coordenadas de texturas."),
+				location) { }
+
+	};
+
+	class OSKAPI_CALL NoVertexColorFoundException : public EngineException {
+
+	public:
+
+		explicit NoVertexColorFoundException(
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("NoVertexColorFoundException: El archivo del modelo 3D no contiene colores de vértices."),
+				location) { }
+
+	};
+
+	class OSKAPI_CALL NoVertexBoneWeightsFoundException : public EngineException {
+
+	public:
+
+		explicit NoVertexBoneWeightsFoundException(
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("NoVertexBoneWeightsFoundException: El archivo del modelo 3D no contiene huesos."),
+				location) { }
+
+	};
+
+	class OSKAPI_CALL NoVertexBoneIndicesFoundException : public EngineException {
+
+	public:
+
+		explicit NoVertexBoneIndicesFoundException(
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("NoVertexBoneIndicesFoundException: El archivo del modelo 3D no contiene huesos."),
+				location) { }
+
+	};
+
+
+	/// @brief Excepción que se lanza cuando los índices de un modelo 3D son de un tipo no soportado.
+	class OSKAPI_CALL UnsupportedIndexTypeException : public EngineException {
+
+	public:
+
+		explicit UnsupportedIndexTypeException(
+			const std::string& type,
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("UnsupportedIndexTypeException: El modelo contiene índices del tipo {} no soportado.", type),
+				location) { }
+
+	};
+
+	/// @brief Excepción que se lanza cuando los joints de un modelo 3D son de un tipo no soportado.
+	class OSKAPI_CALL UnsupportedJointTypeException : public EngineException {
+
+	public:
+
+		explicit UnsupportedJointTypeException(
+			const std::string& type,
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("UnsupportedJointTypeException: El modelo contiene joints del tipo {} no soportado.", type),
+				location) { }
+
+	};
+
+	/// @brief Excepción que se lanza cuando el formato de las imágenes de un modelo no están soportadas.
+	class OSKAPI_CALL UnsupportedModelImageFormatException : public EngineException {
+
+	public:
+
+		explicit UnsupportedModelImageFormatException(
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("UnsupportedModelImageFormatException: El modelo contiene imágenes no soportadas."),
+				location) { }
+
+	};
+
+	/// @brief Excepción que se lanza cuando el formato de los polígonos no es TRIÁNGULOS.
+	class OSKAPI_CALL UnsupportedPolygonModeException : public EngineException {
+
+	public:
+
+		explicit UnsupportedPolygonModeException(
+			std::string_view polygonMode,
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("UnsupportedPolygonModeException: el modelo tiene polígonos {} en vez de TRIANGLES.", polygonMode),
+				location) { }
+
+	};
+
+
+	/// @brief Excepción que se lanza cuando el formato de una propiedad del mesh no está soportada.
+	class OSKAPI_CALL UnsupportedMeshProperties : public EngineException {
+
+	public:
+
+		explicit UnsupportedMeshProperties(
+			std::string_view propertyDataType,
+			const std::source_location& location = std::source_location::current())
+			:
+			EngineException(
+				std::format("UnsupportedMeshProperties: el mesh tiene propiedades del tipo {}.", propertyDataType),
+				location) { }
+
+	};
+
+}

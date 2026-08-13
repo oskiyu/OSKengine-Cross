@@ -1,0 +1,244 @@
+#pragma once
+
+#include "ApiCall.h"
+#include "NumericTypes.h"
+
+#include <array>
+
+#include "Platforms.h"
+#ifdef OSK_PC_ANY
+#include <GLFW/glfw3.h>
+#endif
+
+namespace OSK::IO {
+
+	/// <summary>
+	/// Todos y cada uno de los ejes del gamepad,
+	/// es decir, cada uno de los inputs que pueden
+	/// tener un valor entre 0.0 y 1.0 ó -1.0 y 1.0
+	/// </summary>
+	enum class GamepadAxis {
+
+#ifdef OSK_PC_ANY
+		/// <summary>
+		/// Eje horizontal del joystick izquierdo.
+		/// </summary>
+		/// 
+		/// @note Derecha: 1.0
+		/// @note Izquierda: -1.0
+		LEFT_X = GLFW_GAMEPAD_AXIS_LEFT_X,
+
+		/// <summary>
+		/// Eje vertical del joystick izquierdo.
+		/// </summary>
+		/// 
+		/// @note Arriba: -1.0
+		/// @note Abajo: 1.0
+		LEFT_Y = GLFW_GAMEPAD_AXIS_LEFT_Y,
+
+		/// <summary>
+		/// Eje horizontal del joystick derecho.
+		/// </summary>
+		/// 
+		/// @note Derecha: 1.0
+		/// @note Izquierda: -1.0
+		RIGHT_X = GLFW_GAMEPAD_AXIS_RIGHT_X,
+
+		/// <summary>
+		/// Eje horizontal del joystick derecho.
+		/// </summary>
+		/// 
+		/// @note Arriba: -1.0
+		/// @note Abajo: 1.0
+		RIGHT_Y = GLFW_GAMEPAD_AXIS_RIGHT_Y,
+
+		/// <summary>
+		/// Gatillo izquierdo.
+		/// </summary>
+		/// 
+		/// @note Entre 0.0 y 1.0
+		L2 = GLFW_GAMEPAD_AXIS_LEFT_TRIGGER,
+
+		/// <summary>
+		/// Gatillo derecho.
+		/// </summary>
+		/// 
+		/// @note Entre 0.0 y 1.0
+		R2 = GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER,
+#else
+		/// <summary>
+		/// Eje horizontal del joystick izquierdo.
+		/// </summary>
+		/// 
+		/// @note Derecha: 1.0
+		/// @note Izquierda: -1.0
+		LEFT_X,
+
+		/// <summary>
+		/// Eje vertical del joystick izquierdo.
+		/// </summary>
+		/// 
+		/// @note Arriba: -1.0
+		/// @note Abajo: 1.0
+		LEFT_Y,
+
+		/// <summary>
+		/// Eje horizontal del joystick derecho.
+		/// </summary>
+		/// 
+		/// @note Derecha: 1.0
+		/// @note Izquierda: -1.0
+		RIGHT_X,
+
+		/// <summary>
+		/// Eje horizontal del joystick derecho.
+		/// </summary>
+		/// 
+		/// @note Arriba: -1.0
+		/// @note Abajo: 1.0
+		RIGHT_Y,
+
+		/// <summary>
+		/// Gatillo izquierdo.
+		/// </summary>
+		/// 
+		/// @note Entre 0.0 y 1.0
+		L2,
+
+		/// <summary>
+		/// Gatillo derecho.
+		/// </summary>
+		/// 
+		/// @note Entre 0.0 y 1.0
+		R2,
+#endif
+
+		__END
+
+	};
+
+	/// <summary>
+	/// Botones del gamepad.
+	/// Pueden estar pulsados o no, no hay valores intermedios.
+	/// </summary>
+	/// 
+	/// @note Sigue la notación de un mando de XBox, pero puede ser
+	/// usado con cualquier mando compatible con la plataforma de destino.
+	enum class GamepadButton {
+
+#ifdef OSK_PC_ANY
+		x = GLFW_GAMEPAD_BUTTON_X,
+		y = GLFW_GAMEPAD_BUTTON_Y,
+		A = GLFW_GAMEPAD_BUTTON_A,
+		B = GLFW_GAMEPAD_BUTTON_B,
+
+		START = GLFW_GAMEPAD_BUTTON_START,
+		BACK = GLFW_GAMEPAD_BUTTON_BACK,
+
+		L1 = GLFW_GAMEPAD_BUTTON_LEFT_THUMB,
+		R1 = GLFW_GAMEPAD_BUTTON_RIGHT_THUMB,
+
+		PAD_TOP = GLFW_GAMEPAD_BUTTON_DPAD_UP,
+		PAD_DOWN = GLFW_GAMEPAD_BUTTON_DPAD_DOWN,
+		PAD_LEFT = GLFW_GAMEPAD_BUTTON_DPAD_LEFT,
+		PAD_RIGHT = GLFW_GAMEPAD_BUTTON_DPAD_RIGHT
+#else
+		x,
+		y,
+		A,
+		B,
+
+		START,
+		BACK,
+
+		L1,
+		R1,
+
+		PAD_TOP,
+		PAD_DOWN,
+		PAD_LEFT,
+		PAD_RIGHT
+#endif
+
+	};
+
+
+	/// <summary>
+	/// Estados en el que puede estar un botón del gamepad.
+	/// </summary>
+	enum class GamepadButtonState {
+		/// <summary>
+		/// No está siendo pulsado.
+		/// </summary>
+		RELEASED,
+
+		/// <summary>
+		/// Está siendo pulsado.
+		/// </summary>
+		PRESSED
+
+	};
+
+
+	/// <summary>
+	/// Representa el estado actual de un gamepad conectado a la 
+	/// plataforma.
+	/// </summary>
+	/// 
+	/// @note Puede no estar conectado, se debe comprobar que esté conectado.
+	/// 
+	/// @warning En caso de no estar conectado, los valores devueltos pueden
+	/// ser incoherentes. Comprobar siempre que el gamepad está conectado.
+	class OSKAPI_CALL GamepadState {
+
+	public:
+
+		GamepadState() = default;
+		GamepadState(UIndex32 identifier);
+
+		GamepadButtonState GetButtonState(GamepadButton button) const;
+
+		bool IsButtonDown(GamepadButton button) const;
+		bool IsButtonUp(GamepadButton button) const;
+
+		/// <summary>
+		/// Devuelve el estado del eje dado.
+		/// 
+		/// Véase OSK::IO::GamepadAxis.
+		/// </summary>
+		/// 
+		/// @note Los valores mínimo y máximo pueden ser 0 a 1 ó -1 a 1.
+		/// Véase OSK::IO::GamepadAxis.
+		float GetAxisState(GamepadAxis axis) const;
+
+		/// <summary>
+		/// Devuelve el identificador del mando.
+		/// 
+		/// Entre 0-3.
+		/// </summary>
+		/// 
+		/// @note El mando principal tendrá el identificador 0.
+		UIndex32 GetIdentifier() const;
+
+		/// <summary>
+		/// Comrpueba si el mando está conectado. SI no o etá
+		/// los valores devueltos por las otras funciones serán inválidos.
+		/// </summary>
+		bool IsConnected() const;
+
+		void _SetButtonState(GamepadButton button, GamepadButtonState state);
+		void _SetAxisState(GamepadAxis axis, float value);
+		void _SetConnectionState(bool isConnected);
+
+	private:
+
+		std::array<GamepadButtonState, 4> buttonState{};
+		float axesStates[6]{};
+
+		UIndex32 identifier = 0;
+
+		bool isConnected = false;
+
+	};
+
+}

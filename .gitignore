@@ -1,0 +1,7 @@
+apk/lib/arm64-v8a/*
+bin/
+tmp/
+scripts/__pycache__
+.vs/
+src/out/
+**/*.spv

@@ -1,0 +1,57 @@
+#pragma once
+
+#include "Platforms.h"
+#ifdef OSK_USE_VULKAN_BACKEND
+
+#include "ICommandPool.h"
+#include "NumericTypes.h"
+#include "VulkanTypedefs.h"
+
+#include <vulkan/vulkan.h>
+#include "GpuQueueTypes.h"
+#include "QueueFamilyIndices.h"
+
+namespace OSK::GRAPHICS {
+
+	class GpuVk;
+
+	class OSKAPI_CALL CommandPoolVk final : public ICommandPool {
+
+	public:
+
+		/// @brief Crea el command pool.
+		/// @param device Gpu sobre la que se crea.
+		/// @param supportedCommands Tipos de comandos que soportará el pool.
+		/// @param queueType Familia de colas sobre la que se enviarán
+		/// las listas generadas por este pool.
+		/// @param type Tipo de cola.
+		/// 
+		/// @throws CommandPoolCreationException
+		CommandPoolVk(
+			const GpuVk& device,
+			const QueueFamily& queueType,
+			GpuQueueType type,
+			USize32 resourcesInFlightCount);
+
+		~CommandPoolVk() override;
+
+		UniquePtr<ICommandList> CreateCommandList(const IGpu& device) override;
+		UniquePtr<ICommandList> CreateSingleTimeCommandList(const IGpu& device) override;
+		
+		VkCommandPool GetCommandPool() const;
+
+	private:
+
+		/// @throws CommandListCreationException si no se pudo crear la lista. 
+		UniquePtr<ICommandList> CreateList(const IGpu& device, USize32 numNativeLists);
+
+		USize32 m_resourcesInFlightCount = 0;
+
+		VkCommandPool m_commandPool = nullptr;
+		VkDevice m_logicalDevice = nullptr;
+
+	};
+
+}
+
+#endif

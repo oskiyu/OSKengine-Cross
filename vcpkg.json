@@ -1,0 +1,16 @@
+{
+  "name": "oskengine2",
+  "version-string": "0.0",
+  "dependencies": [
+    "glm",
+    "spirv-tools",
+    "spirv-reflect",
+    "freetype",
+    "openal-soft",
+    {
+      "name": "glfw3",
+      "platform": "!android"
+    }
+  ],
+  "builtin-baseline": "b8a9371ae5a920b021132f443cc5658e82ac7551"
+}
