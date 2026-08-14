@@ -412,7 +412,7 @@ install(EXPORT OSKengineTargets
 
 
 
-set(version 2026.5.2301)
+set(version 2026.1.0)
 
 set_property(TARGET ${OSK_ENGINE_NAME} PROPERTY VERSION ${version})
 set_property(TARGET ${OSK_ENGINE_NAME} PROPERTY SOVERSION 3)
@@ -427,14 +427,13 @@ write_basic_package_version_file(
 
 message(STATUS "configure_package_config_file (OSKengineConfig.cmake)")
 configure_package_config_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+    "${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/OSKengineConfig.cmake"
     INSTALL_DESTINATION lib/cmake/OSKengine)
 
     
 message(STATUS "install FILES (OSKengine.cmake)")
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/OSKengine.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/OSKengineConfigVersion.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/OSKengineConfig.cmake"
     DESTINATION lib/cmake/OSKengine)
