@@ -62,14 +62,14 @@ bool GpuInfoVkAny::SupportsMemoryBudgetQuery() const {
 
 bool GpuInfoVkAny::SupportsDynamicRendering() const {
 #ifdef OSK_ANDROID
-	return false; // No deseado incluso si está disponible.
+	return false; // No deseado incluso si estÃ¡ disponible.
 #endif // OSK_ANDROID
 	return dynamicRenderingFeatures.dynamicRendering == VK_TRUE;
 }
 
 bool GpuInfoVkAny::SupportsSync2() const {
 #ifdef OSK_ANDROID
-	return false; // Por alguna razón falla en Android (Ardeno 710).
+	return false; // Por alguna razÃ³n falla en Android (Ardeno 710).
 #endif // OSK_ANDROID
 	return syncFeatures.synchronization2 == VK_TRUE;
 }
@@ -83,12 +83,12 @@ GpuInfoVkAny GpuInfoVkAny::Get(VkPhysicalDevice gpu, VkSurfaceKHR surface) {
 
 	// Obtiene las propiedades de la gpu.
 	vkGetPhysicalDeviceProperties(gpu, &info.properties);
-	// Obtiene las características de la GPU.
+	// Obtiene las caracterÃ­sticas de la GPU.
 	vkGetPhysicalDeviceFeatures(gpu, &info.features);
 
-	/// NOTA: vkGetPhysicalDeviceProperties2 únicamente funciona con Vulkan >= 1.1
+	/// NOTA: vkGetPhysicalDeviceProperties2 Ãºnicamente funciona con Vulkan >= 1.1
 
-	// Obtiene las características de ray-tracing
+	// Obtiene las caracterÃ­sticas de ray-tracing
 	VkPhysicalDeviceProperties2 gpuProperties2{};
 	gpuProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
 	gpuProperties2.properties = info.properties;
@@ -113,7 +113,7 @@ GpuInfoVkAny GpuInfoVkAny::Get(VkPhysicalDevice gpu, VkSurfaceKHR surface) {
 	info.rtDeviceAddressFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
 	info.rtDeviceAddressFeatures.pNext = &info.dynamicRenderingFeatures;
 
-	// Características para renderizado sin renderpasses
+	// CaracterÃ­sticas para renderizado sin renderpasses
 	info.dynamicRenderingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES;
 	info.dynamicRenderingFeatures.dynamicRendering = VK_TRUE;
 	info.dynamicRenderingFeatures.pNext = &info.bindlessTexturesSets;
@@ -124,7 +124,7 @@ GpuInfoVkAny GpuInfoVkAny::Get(VkPhysicalDevice gpu, VkSurfaceKHR surface) {
 	info.bindlessTexturesSets.descriptorBindingPartiallyBound = VK_TRUE;
 	info.bindlessTexturesSets.pNext = &info.syncFeatures;
 
-	// Permitir sincronización avanzada.
+	// Permitir sincronizaciÃ³n avanzada.
 	info.syncFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SYNCHRONIZATION_2_FEATURES;
 	info.syncFeatures.synchronization2 = VK_TRUE;
 	info.syncFeatures.pNext = &info.meshShaders;
@@ -156,7 +156,7 @@ GpuInfoVkAny GpuInfoVkAny::Get(VkPhysicalDevice gpu, VkSurfaceKHR surface) {
 	//Obtener las capacidades.
 	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(gpu, surface, &shapchainSupport.surfaceCapabilities);
 
-	//Número de formatos soportados.
+	//NÃºmero de formatos soportados.
 	uint32_t formatCount = 0;
 	vkGetPhysicalDeviceSurfaceFormatsKHR(gpu, surface, &formatCount, nullptr);
 
@@ -164,11 +164,11 @@ GpuInfoVkAny GpuInfoVkAny::Get(VkPhysicalDevice gpu, VkSurfaceKHR surface) {
 	shapchainSupport.formats.Resize(formatCount);
 	vkGetPhysicalDeviceSurfaceFormatsKHR(gpu, surface, &formatCount, shapchainSupport.formats.GetData());
 
-	//Números de modos de presentación.
+	//NÃºmeros de modos de presentaciÃ³n.
 	uint32_t presentModeCount = 0;
 	vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surface, &presentModeCount, nullptr);
 
-	//Obtener modos de presentación.
+	//Obtener modos de presentaciÃ³n.
 	shapchainSupport.presentModes.Resize(presentModeCount);
 	vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surface, &formatCount, shapchainSupport.presentModes.GetData());
 
