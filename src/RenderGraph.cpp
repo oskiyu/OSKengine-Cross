@@ -52,8 +52,7 @@ GpuAccessStage GetAccessStage(GpuExclusiveImageUsage usage, RgDependencyType typ
 		break;
 
 	case GpuExclusiveImageUsage::COLOR:
-		// TODO: GpuAccessStage::COLOR_ATTACHMENT_READ ?
-		return GpuAccessStage::COLOR_ATTACHMENT_WRITE;
+		return GpuAccessStage::COLOR_ATTACHMENT_READ | GpuAccessStage::COLOR_ATTACHMENT_WRITE;
 
 	case GpuExclusiveImageUsage::DEPTH:
 		return GpuAccessStage::DEPTH_STENCIL_READ | GpuAccessStage::DEPTH_STENCIL_WRITE;
