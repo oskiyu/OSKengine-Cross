@@ -29,13 +29,13 @@ bool GpuInfoVkAny::IsRtCompatible() const {
 
 
 bool GpuInfoVkAny::IsCompatibleWithBindless() const {
-
 	const auto availableExtensions = GpuVk::GetAvailableExtensions(physicalDevice);
 
 	return
 		// Para poder usar sets incompletos.
 		bindlessTexturesSets.descriptorBindingPartiallyBound == VK_TRUE &&
 		bindlessTexturesSets.runtimeDescriptorArray == VK_TRUE &&
+		bindlessTexturesSets.shaderSampledImageArrayNonUniformIndexing == VK_TRUE &&
 		bindlessTexturesSets.shaderSampledImageArrayNonUniformIndexing == VK_TRUE &&
 		GpuVk::IsExtensionPresent(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME, availableExtensions);
 }
