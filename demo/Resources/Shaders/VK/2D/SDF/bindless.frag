@@ -40,7 +40,7 @@ void main() {
 
     vec4 color = inMainColor;
     if (inContentType == 0) {
-        color = inMainColor * texture(images[inInstanceIndex], inTexCoords); // Texture.
+        color = inMainColor * texture(images[nonuniformEXT(inInstanceIndex)], inTexCoords); // Texture.
     }
     else if (inContentType == 1) {
         color = inMainColor; // Flat color.

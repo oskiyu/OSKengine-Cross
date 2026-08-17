@@ -32,18 +32,18 @@ layout (set = 1, binding = 0) uniform DrawCall {
 void main() {
     outInstanceIndex = gl_InstanceIndex;
     
-    outShapeType = drawCalls[gl_InstanceIndex].typeInfos.x;
-    outContentType = drawCalls[gl_InstanceIndex].typeInfos.y;
-    outFill = drawCalls[gl_InstanceIndex].typeInfos.z;
+    outShapeType = drawCalls[nonuniformEXT(gl_InstanceIndex)].typeInfos.x;
+    outContentType = drawCalls[nonuniformEXT(gl_InstanceIndex)].typeInfos.y;
+    outFill = drawCalls[nonuniformEXT(gl_InstanceIndex)].typeInfos.z;
 
-    outBorderWidth = drawCalls[gl_InstanceIndex].floatInfos.z;
+    outBorderWidth = drawCalls[nonuniformEXT(gl_InstanceIndex)].floatInfos.z;
 
-    outMainColor = drawCalls[gl_InstanceIndex].mainColor;
-    outSecondaryColor = drawCalls[gl_InstanceIndex].mainColor;
+    outMainColor = drawCalls[nonuniformEXT(gl_InstanceIndex)].mainColor;
+    outSecondaryColor = drawCalls[nonuniformEXT(gl_InstanceIndex)].mainColor;
 
-    outTexCoords = drawCalls[gl_InstanceIndex].texCoords.xy + inPos.xy * drawCalls[gl_InstanceIndex].texCoords.zw;
+    outTexCoords = drawCalls[nonuniformEXT(gl_InstanceIndex)].texCoords.xy + inPos.xy * drawCalls[nonuniformEXT(gl_InstanceIndex)].texCoords.zw;
 
-    outCenterPosition = drawCalls[gl_InstanceIndex].floatInfos.xy;
+    outCenterPosition = drawCalls[nonuniformEXT(gl_InstanceIndex)].floatInfos.xy;
     
-    gl_Position = drawCalls[gl_InstanceIndex].matrix * vec4(inPos, 0.0, 1.0);
+    gl_Position = drawCalls[nonuniformEXT(gl_InstanceIndex)].matrix * vec4(inPos, 0.0, 1.0);
 }

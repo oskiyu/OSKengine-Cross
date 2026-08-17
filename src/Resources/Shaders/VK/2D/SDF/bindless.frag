@@ -40,10 +40,29 @@ void main() {
 
     vec4 color = inMainColor;
     if (inContentType == 0) {
-        color = inMainColor * texture(images[inInstanceIndex], inTexCoords); // Texture.
+        color = inMainColor * texture(images[nonuniformEXT(inInstanceIndex)], inTexCoords); // Texture.
     }
     else if (inContentType == 1) {
         color = inMainColor; // Flat color.
+    }
+    
+    if (inInstanceIndex == 0) {
+        color = vec4(0.5, 0.5, 0.5, 1);
+    }
+    if (inInstanceIndex == 1) {
+        color = vec4(1, 0, 0, 1);
+    }
+    if (inInstanceIndex == 2) {
+        color = vec4(0, 1, 0, 1);
+    }
+    if (inInstanceIndex == 3) {
+        color = vec4(0, 0, 1, 1);
+    }
+    if (inInstanceIndex == 4) {
+        color = vec4(1, 1, 0, 1);
+    }
+    if (inInstanceIndex == 5) {
+        color = vec4(1, 0, 1, 1);
     }
     
     outColor = color * sdfValue;
