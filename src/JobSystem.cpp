@@ -35,7 +35,7 @@ JobSystem::JobSystem() : m_scheduledJobs(64) {
 			}));
 	}
 
-	OSK::Engine::GetLogger()->InfoLog(std::format("JobSystem: n˙mero de hilos: {}", m_threads.GetSize()));
+	OSK::Engine::GetLogger()->InfoLog(std::format("JobSystem: n√∫mero de hilos: {}", m_threads.GetSize()));
 }
 
 JobSystem::~JobSystem() {
@@ -47,12 +47,12 @@ JobSystem::~JobSystem() {
 void JobSystem::ScheduleJob(UniquePtr<IJob>&& job) {
 	const auto* ptr = job.GetPointer();
 
-	m_scheduledJobs.Enqueue(std::move(job));
-
 	m_numCurrentlyWorkingThreads_perTag.Increment(ptr->GetName());
 	for (const auto& tag : ptr->GetTags()) {
 		m_numCurrentlyWorkingThreads_perTag.Increment(tag);
 	}
+
+	m_scheduledJobs.Enqueue(std::move(job));
 
 	m_wakingConditional.notify_one();
 }
