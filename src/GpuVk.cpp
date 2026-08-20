@@ -308,20 +308,6 @@ void GpuVk::CreateLogicalDevice() {
 		pNext = (const void**)&info.bindlessTexturesSets.pNext;
 	}
 	
-	const VkDeviceCreateInfo* i = &createInfo;
-	while (i != nullptr) {
-		Engine::GetLogger()->Log(IO::LogLevel::L_DEBUG, "ESSTRUCTURA TIPO: ", std::to_underlying(i->sType));
-
-		if (i->sType == VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES) {
-			const auto* s = reinterpret_cast<const VkPhysicalDeviceDescriptorIndexingFeatures*>(i);
-			Engine::GetLogger()->Log(IO::LogLevel::L_DEBUG, "shaderSampledImageArrayNonUniformIndexing: ", std::to_string(s->shaderSampledImageArrayNonUniformIndexing));
-			Engine::GetLogger()->Log(IO::LogLevel::L_DEBUG, "runtimeDescriptorArray: ", std::to_string(s->runtimeDescriptorArray));
-			Engine::GetLogger()->Log(IO::LogLevel::L_DEBUG, "descriptorBindingVariableDescriptorCount: ", std::to_string(s->descriptorBindingVariableDescriptorCount));
-		}
-
-		i = static_cast<const VkDeviceCreateInfo*>(i->pNext);
-	}
-
 	const auto result = vkCreateDevice(physicalDevice, &createInfo, nullptr, &logicalDevice);
 	OSK_ASSERT(result == VK_SUCCESS, LogicalDeviceCreationException(result));
 }
