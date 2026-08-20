@@ -222,7 +222,7 @@ void MaterialSlotVk::SetAccelerationStructure(
 
 	OSK_ASSERT_2(
 		it != slot.bindings.end(),
-		InvalidArgumentException(std::format("No existe la estructura de aceleración con el binding {} (en {})", binding, GetName())),
+		InvalidArgumentException(std::format("No existe la estructura de aceleraciÃ³n con el binding {} (en {})", binding, GetName())),
 		Engine::GetLogger());
 
 	const UIndex32 bindingIndexInShader = it->second.glslIndex;

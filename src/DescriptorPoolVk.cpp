@@ -20,17 +20,17 @@ using namespace OSK::GRAPHICS;
 DescriptorPoolVk::DescriptorPoolVk(const DescriptorLayoutVk& layout, USize32 maxSets) {
 	const bool isBindless = Engine::GetRenderer()->GetGpu()->SupportsBindlessResources();
 
-	DynamicArray<VkDescriptorPoolSize> sizes;
+	DynamicArray<VkDescriptorPoolSize> sizes{};
 
-	// Información por cada set del layout.
+	// InformaciÃ³n por cada set del layout.
 	for (auto& [name, binding] : layout.GetMaterialSlotLayout()->bindings) {
 		VkDescriptorPoolSize size{};
 		size.type = GetDescriptorTypeVk(binding.type);
 
-		// Número de descriptores en total.
+		// NÃºmero de descriptores en total.
 		// Al tener varios recursos in-flight, debe haber un descriptor por cada frame in-flight.
 		//
-		// Para arrays / caso bindless, debe indicarse el número máximo de elementos del array.
+		// Para arrays / caso bindless, debe indicarse el nÃºmero mÃ¡ximo de elementos del array.
 		size.descriptorCount = Engine::GetRenderer()->GetSwapchainImagesCount() * maxSets;
 		if (isBindless) {
 			size.descriptorCount *= MAX_BINDLESS_RESOURCES;

@@ -343,12 +343,12 @@ float Engine::GetCurrentTime() {
 }
 
 Version Engine::GetVersion() {
-	static Version version{ 2026, 1, 0 };
+	static Version version{ 2026, 1, 1 };
 	return version;
 }
 
 std::string_view Engine::GetBuild() {
-	return "2026.1.0";
+	return "2026.1.1";
 }
 
 UIndex64 Engine::GetCurrentGameFrameIndex() {

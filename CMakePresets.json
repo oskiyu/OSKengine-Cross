@@ -6,7 +6,7 @@
       "hidden": true,
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/bin/${presetName}",
-      "installDir": "$env{OSK_ENGINE_SDK_PATH}/2026_01_00/${presetName}",
+      "installDir": "$env{OSK_ENGINE_SDK_PATH}/2026_01_01/${presetName}",
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": {
           "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
