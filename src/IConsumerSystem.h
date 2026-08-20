@@ -54,7 +54,7 @@ namespace OSK::ECS {
 	/// @tparam TEvent Tipo de evento asociado al sistema.
 	template <typename TEvent>
 	requires IsEcsEvent<TEvent>
-	class OSKAPI_CALL ITypedConsumerSystem : public IConsumerSystem {
+	class ITypedConsumerSystem : public IConsumerSystem {
 
 	public:
 

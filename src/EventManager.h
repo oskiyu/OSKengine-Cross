@@ -32,7 +32,11 @@ namespace OSK::ECS {
 		/// @pre TEvent debe cumplir IsEcsEvent<TEvent>.
 		template <typename TEvent>  requires IsEcsEvent<TEvent>
 		void RegisterEventType() {
-			OSK_ASSERT(!EventHasBeenRegistered<TEvent>(), EventAlreadyRegisteredException(TEvent::GetEventName()));
+			// OSK_ASSERT(!EventHasBeenRegistered<TEvent>(), EventAlreadyRegisteredException(TEvent::GetEventName()));
+			if (EventHasBeenRegistered<TEvent>()) {
+				return;
+			}
+
 			const auto key = static_cast<std::string>(TEvent::GetEventName());
 
 			containers[key] = MakeUnique<EventContainer<TEvent>>();

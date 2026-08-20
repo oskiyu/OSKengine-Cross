@@ -131,7 +131,7 @@ void EntityComponentSystem::SaveBinary(std::string_view path) const {
 	}
 
 
-	// Número de índices:
+	// NÃºmero de Ã­ndices:
 	// - Parte de sistemas.
 	// - Parte de objetos.
 	// - Parte de componentes.
@@ -194,7 +194,7 @@ SavedGameObjectTranslator EntityComponentSystem::LoadScene(std::string_view path
 	for (const auto& componentEntry : data["components"]) {
 		const auto componentTypeName = std::string(componentEntry["component_type"]);
 
-		// Puede estar vacío
+		// Puede estar vacÃ­o
 		if (!componentEntry.contains("components")) {
 			continue;
 		}
@@ -255,7 +255,7 @@ SavedGameObjectTranslator EntityComponentSystem::LoadBinaryScene(std::string_vie
 	OSK_ASSERT(magicNumber == 1, InvalidBinaryDeserializationException("El archivo no sigue el formato .bsf"));
 
 	const auto specVersion = reader.Read<TByte>();
-	OSK_ASSERT(specVersion == 0, InvalidBinaryDeserializationException("El archivo sigue una especificación inválida."));
+	OSK_ASSERT(specVersion == 0, InvalidBinaryDeserializationException("El archivo sigue una especificaciÃ³n invÃ¡lida."));
 
 	// Offsets de los grandes bloques.
 	const auto systemBlockOffset = reader.Read<UIndex64>();
@@ -264,7 +264,7 @@ SavedGameObjectTranslator EntityComponentSystem::LoadBinaryScene(std::string_vie
 
 	OSK_ASSERT(
 		componentBlockOffset < bData.GetSize(),
-		InvalidBinaryDeserializationException("Offsets de grandes bloques incorrectos: superan el tamaño de bytes cagrados."));
+		InvalidBinaryDeserializationException("Offsets de grandes bloques incorrectos: superan el tamaÃ±o de bytes cagrados."));
 
 	// Objects
 	// Hacemos esto primero para poder construir el SavedGameObjectTranslator.
@@ -275,7 +275,7 @@ SavedGameObjectTranslator EntityComponentSystem::LoadBinaryScene(std::string_vie
 
 		for (UIndex64 i = 0; i < numObjects; i++) {
 			translator.AddObject(
-				// Leído en el archivo.
+				// LeÃ­do en el archivo.
 				GameObjectIndex(objectReader.Read<GameObjectIndex::TUnderlyingType>()), 
 				// ID spawneado.
 				SpawnObject());
@@ -300,26 +300,26 @@ SavedGameObjectTranslator EntityComponentSystem::LoadBinaryScene(std::string_vie
 		auto systemDatasReader = block.GetReader_WithOffset(systemsDataOffset);
 
 		for (const auto& name : systemNames) {
-			// Tamaño del bloque.
+			// TamaÃ±o del bloque.
 			// Para comprobar que se leen correctamente todos los datos.
 			// Si no se leen todos los datos, se pueden leer datos corrompidos
 			// en los siguientes sistemas.
 			const auto blockSize = systemDatasReader.Read<USize64>();
 			const auto currentOffset = systemDatasReader.GetCurrentIndex();
 
-			// Leemos la información del sistema, y lo aplicamos.
+			// Leemos la informaciÃ³n del sistema, y lo aplicamos.
 			if (auto* nSystem = dynamic_cast<ISerializableSystem*>(m_systemManager->GetSystem(name))) {
 				nSystem->ApplyConfiguration(&systemDatasReader, translator);
 			}
 
 			m_systemManager->GetSystem(name)->Activate();
 
-			// Obtenemos el número de bytes leídos, y comprobamos que sea el mismo número
+			// Obtenemos el nÃºmero de bytes leÃ­dos, y comprobamos que sea el mismo nÃºmero
 			// que los datos guardados.
 			const auto newOffset = systemDatasReader.GetCurrentIndex();
 			OSK_ASSERT(
 				newOffset - currentOffset == blockSize, 
-				InvalidBinaryDeserializationException(std::format("El componente o sistema{} no ha leído todos los datos de su bloque.", name)));
+				InvalidBinaryDeserializationException(std::format("El componente o sistema{} no ha leÃ­do todos los datos de su bloque.", name)));
 		}
 	}
 
@@ -340,15 +340,15 @@ SavedGameObjectTranslator EntityComponentSystem::LoadBinaryScene(std::string_vie
 
 		// Offset inicial del bloque de datos de los componentes.
 		const auto originalDataBlockOffset = componentDatasOffset + componentReader.GetOriginalOffset();
-		// Número de bytes de datos leídos.
+		// NÃºmero de bytes de datos leÃ­dos.
 		USize64 readDataOffset = 0;
 
 		for (const auto& componentTypeName : componentTypeNames) {
 			// Offset del bloque con los datos de este tipo de componente.
-			//	= offset del bloque de datos + número de bytes leídos en iteraciones anteriores.
+			//	= offset del bloque de datos + nÃºmero de bytes leÃ­dos en iteraciones anteriores.
 			auto componentDataReader = block.GetReader_WithOffset(originalDataBlockOffset + readDataOffset);
 
-			// Número de instancias guardadas.
+			// NÃºmero de instancias guardadas.
 			const auto numComponentes = componentDataReader.Read<USize64>();
 			// Offset del bloque de IDs de objetos.
 			const auto componentObjectsOffset = componentDataReader.Read<USize64>();
@@ -363,7 +363,7 @@ SavedGameObjectTranslator EntityComponentSystem::LoadBinaryScene(std::string_vie
 
 			for (UIndex64 i = 0; i < numComponentes; i++) {
 				const auto newObjectIdx = translator.GetCurrentIndex(GameObjectIndex(componentObjectsReader.Read<GameObjectIndex::TUnderlyingType>()));
-				OSK_ASSERT(m_gameObjectManager->IsGameObjectAlive(newObjectIdx), InvalidBinaryDeserializationException("Objeto enlazado a componente no válido."));
+				OSK_ASSERT(m_gameObjectManager->IsGameObjectAlive(newObjectIdx), InvalidBinaryDeserializationException("Objeto enlazado a componente no vÃ¡lido."));
 
 				auto* container = m_componentManager->GetContainer(componentTypeName);
 				container->BinaryDeserializeComponent(&componentDataReader, newObjectIdx, translator);
@@ -382,7 +382,7 @@ SavedGameObjectTranslator EntityComponentSystem::LoadBinaryScene(std::string_vie
 
 		OSK_ASSERT(
 			originalDataBlockOffset + readDataOffset == bData.GetSize(), 
-			InvalidBinaryDeserializationException("No se han leído todos los datos guardados."));
+			InvalidBinaryDeserializationException("No se han leÃ­do todos los datos guardados."));
 	}	
 
 	return translator;
@@ -484,6 +484,12 @@ ExternalEcsListUuid EntityComponentSystem::RegisterExternalList(const Signature&
 
 	m_externalSignatures[uuid_str] = signature;
 	m_externalCompatibleObjsLists[uuid_str] = {};
+
+	for (const GameObjectIndex obj : m_gameObjectManager->GetAllLivingObjects()) {
+		if (signature.IsCompatible(m_gameObjectManager->GetSignature(obj))) {
+			m_externalCompatibleObjsLists[uuid_str].insert(obj);
+		}
+	}
 
 	return uuid;
 }

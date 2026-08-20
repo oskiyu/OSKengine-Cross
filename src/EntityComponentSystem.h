@@ -70,13 +70,13 @@ namespace OSK::ECS {
 		/// en formato JSON.
 		/// @param path Ruta del archivo donde se guardará el 
 		/// estado del juego.
-		void Save(std::string_view path) const;
+		void OSKAPI_CALL Save(std::string_view path) const;
 
 		/// @brief Guarda el estado del juego en el fichero indicado,
 		/// en formato `.bsf`.
 		/// @param path Ruta del archivo donde se guardará el 
 		/// estado del juego.
-		void SaveBinary(std::string_view path) const;
+		void OSKAPI_CALL SaveBinary(std::string_view path) const;
 
 		/// @brief Carga una escena almacenada en disco.
 		/// @param path Ruta del archivo donde se guarda el 
@@ -84,7 +84,7 @@ namespace OSK::ECS {
 		/// 
 		/// @pre El archivo @p path debe existir.
 		/// @throws InvalidArgumentException si el archivo no existe.
-		SavedGameObjectTranslator LoadScene(std::string_view path);
+		SavedGameObjectTranslator OSKAPI_CALL LoadScene(std::string_view path);
 
 		/// @brief Carga una escena almacenada en disco.
 		/// @param path Ruta del archivo donde se guarda el 
@@ -99,26 +99,23 @@ namespace OSK::ECS {
 		/// distinta de 0.
 		/// @throws InvalidBinaryDeserializationException si el archivo
 		/// está corrompido de alguna manera.
-		SavedGameObjectTranslator LoadBinaryScene(std::string_view path);
+		SavedGameObjectTranslator OSKAPI_CALL LoadBinaryScene(std::string_view path);
 
 #pragma endregion
 		
 #pragma region Components
 
 		/// @brief Registra un tipo de componente.
+		/// Si el componente ya fue previamente registrado,
+		/// no hace nada.
 		/// @tparam TComponent Tipo del componente.
 		/// 
 		/// @pre TComponent debe validar IsEcsComponent.
-		/// @pre El componente no debe haber sido previamente registrado.
-		/// 
-		/// @throws ComponentAlreadyRegisteredException si el componente ya fue previamente registrado.
 		template <typename TComponent> requires IsEcsComponent<TComponent>
 		void RegisterComponent() {
-			OSK_ASSERT(
-				!m_componentManager->ComponentHasBeenRegistered<TComponent>(), 
-				ComponentAlreadyRegisteredException(TComponent::GetComponentTypeName()))
-
-			m_componentManager->RegisterComponent<TComponent>();
+			if (!m_componentManager->ComponentHasBeenRegistered<TComponent>()) {
+				m_componentManager->RegisterComponent<TComponent>();
+			}
 		}
 
 		/// @brief Añade el componente dado al objeto.
@@ -192,7 +189,7 @@ namespace OSK::ECS {
 		/// @brief Comprueba si el objeto dado tiene añadido un componente del tipo dado.
 		/// @param obj Entidad comprobada.
 		/// @param componentType Tipo del componente.
-		bool ObjectHasComponent(GameObjectIndex obj, ComponentType componentType) const;
+		bool OSKAPI_CALL ObjectHasComponent(GameObjectIndex obj, ComponentType componentType) const;
 
 		/// @brief Elimina el componente del objeto.
 		/// @tparam TComponent Tipo del componente.
@@ -262,13 +259,13 @@ namespace OSK::ECS {
 		/// @return IDs de los objetos que contiene el objeto.
 		/// @pre @p obj debe corresponderse con un objeto válido.
 		/// @throws InvalidArgumentException si se incumple la precondición.
-		DynamicArray<ComponentType> GetObjectComponentsTypes(GameObjectIndex obj) const;
+		DynamicArray<ComponentType> OSKAPI_CALL GetObjectComponentsTypes(GameObjectIndex obj) const;
 
 		/// @param type Tipo de componente.
 		/// @return Nombre del tipo de componente.
 		/// @pre @p type debe identificar un tipo de componente
 		/// que haya sido previamente registrado.
-		std::string GetComponentTypeName(ComponentType type) const;
+		std::string OSKAPI_CALL GetComponentTypeName(ComponentType type) const;
 
 #pragma endregion
 
@@ -296,6 +293,15 @@ namespace OSK::ECS {
 
 			if constexpr (std::is_base_of_v<IRenderSystem, TSystem>) {
 				m_renderSystems.Insert(reinterpret_cast<IRenderSystem*>(output));
+			}
+
+			// Nos aseguramos de que el sistema contenga
+			// todos los objetos compatibles añadidos
+			// previamente.
+			// 
+			// Se podría optimizar.
+			for (const auto obj : GetLivingObjects()) {
+				m_systemManager->GameObjectSignatureChanged(obj, m_gameObjectManager->GetSignature(obj));
 			}
 
 			return output;
@@ -340,7 +346,7 @@ namespace OSK::ECS {
 				return m_systemManager->GetSystem<TSystem>();
 		}
 
-		ISystem* GetSystemByName(std::string_view name);
+		OSKAPI_CALL ISystem* GetSystemByName(std::string_view name);
 
 		/// @tparam TSystem Tipo del sistema.
 		/// @return True si el sistema está registrado y se está ejecutando.
@@ -426,13 +432,13 @@ namespace OSK::ECS {
 		/// 
 		/// @param id Identificador único de la lista.
 		/// @param signature Signature de la lista.
-		ExternalEcsListUuid RegisterExternalList(const Signature& signature);
+		ExternalEcsListUuid OSKAPI_CALL RegisterExternalList(const Signature& signature);
 
 		/// @param uuid Identificador único de la lista.
 		/// @return Lista asociada.
 		/// @pre La lista debe haber sido previamente registrada
 		/// mediante SetExternalSignature.
-		std::unordered_set<GameObjectIndex> GetCompatibleObjects(ExternalEcsListUuid uuid);
+		std::unordered_set<GameObjectIndex> OSKAPI_CALL GetCompatibleObjects(ExternalEcsListUuid uuid);
 
 		/// @brief Crea un nuevo objeto vacío y devuelve su ID.
 		/// @return ID del nuevo objeto.
@@ -448,10 +454,10 @@ namespace OSK::ECS {
 		void OSKAPI_CALL DestroyObject(GameObjectIndex* obj);
 
 		/// @return IDs de todos los objetos vivos.
-		std::span<const GameObjectIndex> GetLivingObjects() const;
+		std::span<const GameObjectIndex> OSKAPI_CALL GetLivingObjects() const;
 
 		/// @return Todos los sistemas registrados.
-		DynamicArray<const ISystem*> GetAllSystems() const;
+		DynamicArray<const ISystem*> OSKAPI_CALL GetAllSystems() const;
 
 		/// @brief Finaliza el frame.
 		/// Debe llamarse una vez al finalizar el frame.	
@@ -492,10 +498,10 @@ namespace OSK::ECS {
 		/// @brief Actualiza las listas externas de objetos compatibles
 		/// después de cambiar el signature de un objeto.
 		/// @param obj Objeto cuyo signature ha cambiado.
-		void UpdateExternalObjectList(GameObjectIndex obj);
+		void OSKAPI_CALL UpdateExternalObjectList(GameObjectIndex obj);
 
 		/// @brief Elimina un objeto de las listas externas de objetos.
-		void RemoveExternalObject(GameObjectIndex obj);
+		void OSKAPI_CALL RemoveExternalObject(GameObjectIndex obj);
 
 	};
 

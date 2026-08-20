@@ -32,6 +32,13 @@ namespace OSK::ECS {
 	/// @note Dueño de los sistemas.
 	class OSKAPI_CALL SystemManager {
 
+	private:
+
+		struct SystemEntry {
+			UniquePtr<ISystem> system;
+			DynamicArray<GameObjectIndex> compatibleObjects;
+		};
+
 	public:
 
 		SystemManager() = default;
@@ -57,7 +64,6 @@ namespace OSK::ECS {
 		/// @param obj Objeto cuyo signature ha cambiado.
 		/// @param signature Nuevo signature del objeto.
 		void GameObjectSignatureChanged(GameObjectIndex obj, const Signature& signature);
-
 
 
 		/// @brief Registra un sistema, con lo que se ejecutará
@@ -156,11 +162,6 @@ namespace OSK::ECS {
 			ISystem* system,
 			TDeltaTime deltaTime, 
 			const EventManager& eventManager);
-
-		struct SystemEntry {
-			UniquePtr<ISystem> system;
-			DynamicArray<GameObjectIndex> compatibleObjects;
-		};
 
 		static void AddObject(SystemEntry* entry, GameObjectIndex obj);
 		static void RemoveObject(SystemEntry* entry, GameObjectIndex obj);
