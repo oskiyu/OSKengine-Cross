@@ -437,9 +437,17 @@ GameObjectIndex EntityComponentSystem::SpawnObject() {
 void EntityComponentSystem::DestroyObject(GameObjectIndex* obj) {
 	m_systemManager->GameObjectDestroyed(*obj);
 	m_componentManager->GameObjectDestroyed(*obj);
-	m_gameObjectManager->DestroyGameObject(obj);
-
 	RemoveExternalObject(*obj);
+	m_gameObjectManager->DestroyGameObject(obj);
+}
+
+void EntityComponentSystem::DestroyObject(GameObjectIndex obj) {
+	m_systemManager->GameObjectDestroyed(obj);
+	m_componentManager->GameObjectDestroyed(obj);
+	RemoveExternalObject(obj);
+
+	auto copy = obj;
+	m_gameObjectManager->DestroyGameObject(&obj);
 }
 
 std::span<const GameObjectIndex> EntityComponentSystem::GetLivingObjects() const {

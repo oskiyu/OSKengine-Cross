@@ -453,6 +453,10 @@ namespace OSK::ECS {
 		/// @note Su ID cambia a 0 para indicar que ya no es una ID válida.
 		void OSKAPI_CALL DestroyObject(GameObjectIndex* obj);
 
+		/// @brief Elimina un objeto.
+		/// @param obj Referencia al ID.
+		void OSKAPI_CALL DestroyObject(GameObjectIndex obj);
+
 		/// @return IDs de todos los objetos vivos.
 		std::span<const GameObjectIndex> OSKAPI_CALL GetLivingObjects() const;
 
