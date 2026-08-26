@@ -14,6 +14,7 @@
 #include "MaterialSystem.h"
 #include "Material.h"
 #include "UniquePtr.hpp"
+#include "FileIO.h"
 
 #include "FontLoadingExceptions.h"
 #include "InvalidArgumentException.h"
@@ -34,25 +35,26 @@ void Font::LoadSizedFont(USize32 fontSize) {
 	if (ContainsInstance(fontSize))
 		return;
 
-	// Carga de la librerÌa.
+	// Carga de la librer√≠a.
 	static FT_Library freeType = nullptr;
 	if (freeType == nullptr) {
 		const auto result = FT_Init_FreeType(&freeType);
 		OSK_ASSERT(result == 0, FontLibraryInitializationException(result));
 	}
 
-	// Un FT_Face describe la tipografÌa de la fuente.
+	// Un FT_Face describe la tipograf√≠a de la fuente.
 	FT_Face face = nullptr;
 
 	// Carga de la fuente.
-	FT_Error result = FT_New_Face(freeType, m_fontFile.c_str(), 0, &face);
+	auto fileData = IO::FileIO::ReadFromFile(m_fontFile);
+	FT_Error result = FT_New_Memory_Face(freeType, (const FT_Byte*)fileData.c_str(), fileData.size(), 0, &face);
 	OSK_ASSERT(result == 0, FontLodaingException(result));
 
-	// Establece el tamaÒo de esta instancia en concreto.
+	// Establece el tama√±o de esta instancia en concreto.
 	FT_Set_Pixel_Sizes(face, 0, fontSize);
 
 
-	// Definir· cada uno de los caracteres.
+	// Definir√° cada uno de los caracteres.
 	struct FtChar {
 		UniquePtr<TByte> data;
 		USize32 sizeX = 0;
@@ -67,7 +69,7 @@ void Font::LoadSizedFont(USize32 fontSize) {
 	Vector2ui gpuImageSize = { 0, 0 };
 
 	// Cargamos todos los caracteres.
-	// Actualizamos el tamaÒo de la imagen.
+	// Actualizamos el tama√±o de la imagen.
 	for (USize32 i = 0; i < 255; i++) {
 		// Carga / renderizado del char.
 		result = FT_Load_Char(face, i, FT_LOAD_RENDER);
@@ -90,13 +92,13 @@ void Font::LoadSizedFont(USize32 fontSize) {
 			face->glyph->bitmap.buffer, 
 			bitmapSize);
 
-		// TamaÒo de la imagen.
+		// Tama√±o de la imagen.
 		gpuImageSize.x += ftCharacters[i].sizeX;
 		if (ftCharacters[i].sizeY > gpuImageSize.y)
 			gpuImageSize.y = ftCharacters[i].sizeY;
 	}
 
-	// CreaciÛn de la imagen.
+	// Creaci√≥n de la imagen.
 	GpuImageCreateInfo imageInfo = GpuImageCreateInfo::CreateDefault2D(
 		gpuImageSize, Format::RGBA8_SRGB, 
 		GpuImageUsage::SAMPLED | GpuImageUsage::TRANSFER_SOURCE | GpuImageUsage::TRANSFER_DESTINATION);
@@ -202,7 +204,7 @@ FontInstance& Font::GetInstance(USize32 fontSize) {
 }
 
 const FontInstance& Font::GetExistingInstance(USize32 fontSize) const {
-	OSK_ASSERT(m_instances.contains(fontSize), InvalidArgumentException(std::format("No existe la instancia con el tamaÒo {}.", fontSize)));
+	OSK_ASSERT(m_instances.contains(fontSize), InvalidArgumentException(std::format("No existe la instancia con el tama√±o {}.", fontSize)));
 	return m_instances.at(fontSize);
 }
 
