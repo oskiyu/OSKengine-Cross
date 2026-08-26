@@ -29,12 +29,12 @@ VkSampler OSK::GRAPHICS::GpuImageSamplerVk::CreateSamplerVk(const GpuImageSample
 	samplerInfo.minFilter = GetFilterTypeVk(info.filteringType);
 	samplerInfo.magFilter = GetFilterTypeVk(info.filteringType);
 
-	// AddressMode: como se accede a la imagen con TexCoords fuera de los límites.
+	// AddressMode: como se accede a la imagen con TexCoords fuera de los lÃ­mites.
 	samplerInfo.addressModeU = GetAddressModeVk(info.addressMode);
 	samplerInfo.addressModeV = GetAddressModeVk(info.addressMode);
 	samplerInfo.addressModeW = GetAddressModeVk(info.addressMode);
 
-	samplerInfo.anisotropyEnable = VK_TRUE;
+	samplerInfo.anisotropyEnable = info.filteringType == GpuImageFilteringType::NEAREST ? VK_FALSE : VK_TRUE;
 	samplerInfo.maxAnisotropy = 16.0f;
 
 	samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK;
@@ -48,7 +48,7 @@ VkSampler OSK::GRAPHICS::GpuImageSamplerVk::CreateSamplerVk(const GpuImageSample
 	samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
 
 	switch (info.mipMapMode) {
-	case GpuImageMipmapMode::AUTO: // (preprocesado para tener el número de mips en info.maxMipLevel).
+	case GpuImageMipmapMode::AUTO: // (preprocesado para tener el nÃºmero de mips en info.maxMipLevel).
 	case GpuImageMipmapMode::CUSTOM:
 		samplerInfo.minLod = static_cast<float>(info.minMipLevel);
 		samplerInfo.maxLod = static_cast<float>(info.maxMipLevel);
