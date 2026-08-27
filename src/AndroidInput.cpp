@@ -34,31 +34,28 @@ int32_t AndroidInput::HandleInputEvent(android_app* app, AInputEvent* event) {
 	{
 		const auto action = AMotionEvent_getAction(event);
 		const auto pointerCount = AMotionEvent_getPointerCount(event);
+		const auto ptrIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
 
 		switch (action & AMOTION_EVENT_ACTION_MASK) {
 
 		case AMOTION_EVENT_ACTION_POINTER_UP:
 		case AMOTION_EVENT_ACTION_UP:
-			for (UIndex64 i = 0; i < pointerCount; i++) {
-				AndroidInput::m_self->m_inputCache.erase(AndroidInput::m_self->m_inputCache.find(TouchInputUuid(AMotionEvent_getPointerId(event, i))));
-			}
+			AndroidInput::m_self->m_inputCache.erase(AndroidInput::m_self->m_inputCache.find(TouchInputUuid(AMotionEvent_getPointerId(event, ptrIndex))));
 			break;
 
 
 		case AMOTION_EVENT_ACTION_POINTER_DOWN:
 		case AMOTION_EVENT_ACTION_DOWN:
 		case AMOTION_EVENT_ACTION_MOVE:
-			for (UIndex64 i = 0; i < pointerCount; i++) {
-				TouchInput input{};
-				input.position.x = AMotionEvent_getX(event, i);
-				input.position.y = AMotionEvent_getY(event, i);
-				input.inputId = TouchInputUuid(AMotionEvent_getPointerId(event, i));
+			TouchInput input{};
+			input.position.x = AMotionEvent_getX(event, ptrIndex);
+			input.position.y = AMotionEvent_getY(event, ptrIndex);
+			input.inputId = TouchInputUuid(AMotionEvent_getPointerId(event, ptrIndex));
 
-				input.timeSinceInputStart = 0.0f;  // @todo
-				input.type = TouchInputType::START; // @todo
-
-				AndroidInput::m_self->m_inputCache[TouchInputUuid(AMotionEvent_getPointerId(event, i))] = input;
-			}
+			input.timeSinceInputStart = 0.0f;  // @todo
+			input.type = TouchInputType::START; // @todo
+			
+			AndroidInput::m_self->m_inputCache[TouchInputUuid(AMotionEvent_getPointerId(event, ptrIndex))] = input;
 			break;
 		}
 		
