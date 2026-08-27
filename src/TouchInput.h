@@ -45,3 +45,5 @@ namespace OSK::IO {
 	};
 
 }
+
+OSK_DEFINE_UUID_HASH(OSK::IO::TouchInputUuid);

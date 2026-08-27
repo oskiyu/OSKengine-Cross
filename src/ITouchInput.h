@@ -19,13 +19,13 @@ namespace OSK::IO {
 
 		/// @return Todos los toques en pantalla táctil
 		/// que han ocurrido en este frame.
-		const DynamicArray<TouchInput>& GetCurrentFrameInputs() const;
+		DynamicArray<TouchInput> GetCurrentFrameInputs() const;
 
 	protected:
 
 		/// @brief Almacena las entradas en un frame.
 		/// Se debe limpiar cada frame.
-		DynamicArray<TouchInput> m_currentFrameInputs{};
+		std::unordered_map<TouchInputUuid, TouchInput> m_currentFrameInputs{};
 
 	};
 

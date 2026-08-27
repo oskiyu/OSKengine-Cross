@@ -52,7 +52,7 @@ namespace OSK::IO {
 		/// 
 		/// Después de terminar el frame, su contenido se copiará
 		/// a `m_currentFrameInputs`.
-		DynamicArray<TouchInput> m_inputCache{};
+		std::unordered_map<TouchInputUuid, TouchInput> m_inputCache{};
 
 		/// @brief Referencia a la aplicación Android nativa.
 		android_app* m_app = nullptr;

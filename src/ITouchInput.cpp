@@ -3,6 +3,12 @@
 using namespace OSK;
 using namespace OSK::IO;
 
-const DynamicArray<TouchInput>& ITouchInput::GetCurrentFrameInputs() const {
-	return m_currentFrameInputs;
+DynamicArray<TouchInput> ITouchInput::GetCurrentFrameInputs() const {
+	auto output = DynamicArray<TouchInput>::CreateReserved(m_currentFrameInputs.size());
+
+	for (const auto& [uiid, input] : m_currentFrameInputs) {
+		output.Insert(input);
+	}
+
+	return output;
 }
