@@ -181,6 +181,10 @@ namespace OSK::GRAPHICS {
 		
 		USize32 GetImagesInFlightCount() const;
 
+		/// @return Rotación, en grados, de las
+		/// imágenes del swapchain.
+		float GetSwapchainRotation() const;
+
 		/// @return Índidce del próximo fotograma que será presentado.
 		/// @pre Se ha llamado a IRenderer::Initialize.
 		virtual USize32 GetCurrentFrameIndex() const = 0;

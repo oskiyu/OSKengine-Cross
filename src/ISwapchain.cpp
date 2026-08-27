@@ -163,3 +163,7 @@ void ISwapchain::SetPresentMode(const IGpu& gpu, PresentMode mode) {
 Format ISwapchain::GetColorFormat() const {
 	return m_colorFormat;
 }
+
+float ISwapchain::GetRotation() const {
+	return m_rotation;
+}

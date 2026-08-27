@@ -168,14 +168,38 @@ void SwapchainVk::CreationLogic(const GpuVk& device, const Vector2ui& resolution
 
 	VkSurfaceCapabilitiesKHR surfaceCapabilities{};
 	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device.GetPhysicalDevice(), device.GetSurface(), &surfaceCapabilities);
-	
-	// createInfo.imageExtent = surfaceCapabilities.minImageExtent;
 
 	// Crearlo y error-handling.
+	Vector2ui res = { surfaceCapabilities.currentExtent.width, surfaceCapabilities.currentExtent.height };
+	
+	switch (surfaceCapabilities.currentTransform) {
+
+	case VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR:
+	case VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR:
+		m_rotation = 90.0f;
+		std::swap(res.x, res.y);
+		break;
+
+	case VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR:
+	case VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_180_BIT_KHR:
+		m_rotation = 180.0f;
+		break;
+
+	case VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR:
+	case VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR:
+		m_rotation = 270.0f;
+		std::swap(res.x, res.y);
+		break;
+
+	}
+
+	createInfo.imageExtent.width  = res.x;
+	createInfo.imageExtent.height = res.y;
+
 	VkResult result = vkCreateSwapchainKHR(device.GetLogicalDevice(), &createInfo, nullptr, &m_swapchain);
 	OSK_ASSERT(result == VK_SUCCESS, SwapchainCreationException("No se ha podido crear el swapchain", result));
 
-	AcquireImages(device, resolution);
+	AcquireImages(device, res);
 	AcquireViews(device);
 }
 

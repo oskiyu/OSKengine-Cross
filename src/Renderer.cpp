@@ -185,6 +185,10 @@ USize32 IRenderer::GetImagesInFlightCount() const {
 	return std::min<USize32>(GetSwapchainImagesCount(), MAX_RESOURCES_IN_FLIGHT);
 }
 
+float IRenderer::GetSwapchainRotation() const {
+	return m_swapchain->GetRotation();
+}
+
 RenderTarget* IRenderer::GetFinalRenderTarget() {
 	return m_finalRenderTarget.GetPointer();
 }

@@ -29,15 +29,10 @@ void RenderToSwapchainPass::Execute(ICommandList* cmdList) {
 	auto drawCall = SdfDrawCall2D::Texture(*img.GetView(GpuImageViewConfig::CreateSampled_SingleMipLevel(0)));
 	drawCall.transform.SetPosition(Vector2f::Zero);
 	drawCall.transform.SetScale(Vector2f::One);
+	drawCall.transform.SetRotation(Engine::GetRenderer()->GetSwapchainRotation());
 
 	drawCall.samplerDesc = GpuImageSamplerDesc::CreateDefault_NoMipMap();
 	drawCall.samplerDesc.filteringType = GpuImageFilteringType::NEAREST;
-
-#ifdef OSK_ANDROID
-	// Se gira la imagen 90º para mostrarse en horizontal.
-	// @todo Implementar shader de computación para realizar el giro.
-	drawCall.transform.SetRotation(90.0f);
-#endif
 
 	sdfRenderer->Draw(drawCall);
 

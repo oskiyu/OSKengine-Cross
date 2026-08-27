@@ -96,6 +96,10 @@ namespace OSK::GRAPHICS {
 		/// @return Formato de las imágenes del swapchain.
 		Format GetColorFormat() const;
 
+		/// @return Rotación, en grados,
+		/// de la imagen del swapchain.
+		float GetRotation() const;
+
 	protected:
 
 		/// @brief Inicializa las variables de la clase.
@@ -135,6 +139,8 @@ namespace OSK::GRAPHICS {
 
 		DynamicArray<UniquePtr<GpuImage>> m_images{};
 		
+		float m_rotation = 0.0f;
+
 	private:
 
 		USize32 m_numImagesInFlight = MAX_RESOURCES_IN_FLIGHT;
