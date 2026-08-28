@@ -46,8 +46,12 @@ void Font::LoadSizedFont(USize32 fontSize) {
 	FT_Face face = nullptr;
 
 	// Carga de la fuente.
+#ifdef OSK_ANDROID
 	auto fileData = IO::FileIO::ReadFromFile(m_fontFile);
 	FT_Error result = FT_New_Memory_Face(freeType, (const FT_Byte*)fileData.c_str(), fileData.size(), 0, &face);
+#else
+	FT_Error result = FT_New_Face(freeType, m_fontFile.c_str(), 0, &face);
+#endif // OSK_ANDROID
 	OSK_ASSERT(result == 0, FontLodaingException(result));
 
 	// Establece el tamaño de esta instancia en concreto.
