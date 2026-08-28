@@ -23,7 +23,7 @@ namespace OSK {
 		/// <summary>
 		/// Crea un vector 4D nulo { 0, 0, 0, 0 }.
 		/// </summary>
-		Vector4_t() {
+		constexpr Vector4_t() {
 			this->x = (T)0;
 			this->y = (T)0;
 			this->z = (T)0;
@@ -33,7 +33,7 @@ namespace OSK {
 		/// <summary>
 		/// Crea un vector 4D.
 		/// </summary>
-		Vector4_t(const T& x, const T& y, const T& z, const T& w) {
+		constexpr Vector4_t(const T& x, const T& y, const T& z, const T& w) {
 			this->x = x;
 			this->y = y;
 			this->z = z;
@@ -44,7 +44,7 @@ namespace OSK {
 		/// Crea una instancia del Vector2 en la que X, Y, Z y W tienen en mismo valor.
 		/// </summary>
 		/// <param name="value">Valor para X, Y, Z y W.</param>
-		Vector4_t(const T& value) {
+		constexpr Vector4_t(const T& value) {
 			this->x = value;
 			this->y = value;
 			this->z = value;
@@ -54,7 +54,7 @@ namespace OSK {
 		/// <summary>
 		/// Crea un vector 4D con los parámetros de vec.
 		/// </summary>
-		Vector4_t(const glm::vec4& vec) {
+		constexpr Vector4_t(const glm::vec4& vec) {
 			this->x = vec.x;
 			this->y = vec.y;
 			this->z = vec.z;
@@ -66,7 +66,7 @@ namespace OSK {
 		/// 
 		/// @note X1 + X2; Y1 + Y2, Z1 + Z2, W1 + W2.
 		/// </summary>
-		Vector4_t operator+(const Vector4_t& vec) const {
+		constexpr Vector4_t operator+(const Vector4_t& vec) const {
 			return Vector4_t(x + vec.x, y + vec.y, z + vec.z, w + vec.w);
 		}
 
@@ -76,7 +76,7 @@ namespace OSK {
 		/// @note X1 + X2; Y1 + Y2, Z1 + Z2, W1 + W2.
 		/// @note Modifica el vector.
 		/// </summary>
-		Vector4_t& operator+=(const Vector4_t& vec) {
+		constexpr Vector4_t& operator+=(const Vector4_t& vec) {
 			*this = operator+(vec);
 			
 			return *this;
@@ -87,7 +87,7 @@ namespace OSK {
 		/// 
 		/// @note -X; -Y; -Z; -W.
 		/// </summary>
-		Vector4_t operator-() const {
+		constexpr Vector4_t operator-() const {
 			return Vector4_t(-x, -y, -z, -w);
 		}
 
@@ -96,7 +96,7 @@ namespace OSK {
 		/// 
 		/// @note X1 - X2; Y1 - Y2; Z1 - Z2, W1 - W2.
 		/// </summary>
-		Vector4_t operator-(const Vector4_t& vec) const {
+		constexpr Vector4_t operator-(const Vector4_t& vec) const {
 			return Vector4_t(x - vec.x, y - vec.y, z - vec.z, w - vec.w);
 		}
 
@@ -106,7 +106,7 @@ namespace OSK {
 		/// @note X1 - X2; Y1 - Y2; Z1 - Z2, W1 - W2.
 		/// @note Modifica el vector.
 		/// </summary>
-		Vector4_t& operator-=(const Vector4_t& vec) {
+		constexpr Vector4_t& operator-=(const Vector4_t& vec) {
 			*this = operator-(vec);
 
 			return *this;
@@ -117,7 +117,7 @@ namespace OSK {
 		/// 
 		/// @note X1 * X2; Y1 * Y2; Z1 * Z2; W1 * W2.
 		/// </summary>
-		Vector4_t operator*(const Vector4_t& vec) const {
+		constexpr Vector4_t operator*(const Vector4_t& vec) const {
 			return Vector4_t(x * vec.x, y * vec.y, z * vec.z, w * vec.w);
 		}
 
@@ -127,7 +127,7 @@ namespace OSK {
 		/// @note X1 * X2; Y1 * Y2; Z1 * Z2, W1 * W2.
 		/// @note Modifica el vector.
 		/// </summary>
-		Vector4_t& operator*=(const Vector4_t& vec) {
+		constexpr Vector4_t& operator*=(const Vector4_t& vec) {
 			*this = operator*(vec);
 
 			return *this;
@@ -138,7 +138,7 @@ namespace OSK {
 		/// 
 		/// @note X * value; Y * value; Z * value; W * value.
 		/// </summary>
-		Vector4_t operator*(const T& value) const {
+		constexpr Vector4_t operator*(const T& value) const {
 			return Vector4_t(x * value, y * value, z * value, w * value);
 		}
 
@@ -148,7 +148,7 @@ namespace OSK {
 		/// @note X1 * value; Y1 * value; Z1 * value, W1 * value.
 		/// @note Modifica el vector.
 		/// </summary>
-		Vector4_t& operator*=(const T& value) {
+		constexpr Vector4_t& operator*=(const T& value) {
 			*this = operator*(value);
 
 			return *this;
@@ -159,7 +159,7 @@ namespace OSK {
 		/// 
 		/// @note X / vec.X; Y / vec.Y, Z / vec.Z, W / vec.W.
 		/// </summary>
-		Vector4_t operator/(const Vector4_t& vec) const {
+		constexpr Vector4_t operator/(const Vector4_t& vec) const {
 			return Vector4_t(x / vec.x, y / vec.y, z / vec.z, w / vec.w);
 		}
 
@@ -169,7 +169,7 @@ namespace OSK {
 		/// @note X1 / X2; Y1 / Y2; Z1 / Z2, W1 / W2.
 		/// @note Modifica el vector.
 		/// </summary>
-		Vector4_t& operator/=(const Vector4_t& vec) {
+		constexpr Vector4_t& operator/=(const Vector4_t& vec) {
 			*this = operator/(vec);
 
 			return *this;
@@ -180,7 +180,7 @@ namespace OSK {
 		/// 
 		/// @note X / value; Y / value; Z / value; W / value.
 		/// </summary>
-		Vector4_t operator/(const T& value) const {
+		constexpr Vector4_t operator/(const T& value) const {
 			return Vector4_t(x / value, y / value, z / value, w / value);
 		}
 
@@ -190,7 +190,7 @@ namespace OSK {
 		/// @note X1 / value; Y1 / value; Z1 / value, W1 / value.
 		/// @note Modifica el vector.
 		/// </summary>
-		Vector4_t& operator/=(const T& value) {
+		constexpr Vector4_t& operator/=(const T& value) {
 			*this = operator/(value);
 
 			return *this;
@@ -200,7 +200,7 @@ namespace OSK {
 		/// Comparación.
 		/// True si todos los componentes son iguales.
 		/// </summary>
-		bool operator==(const Vector4_t& vec) const {
+		constexpr bool operator==(const Vector4_t& vec) const {
 			return x == vec.x && y == vec.y && z == vec.z && w == vec.w;
 		}
 
@@ -208,84 +208,84 @@ namespace OSK {
 		/// Comparación.
 		/// True si no todos los componentes son iguales.
 		/// </summary>
-		bool operator!=(const Vector4_t& vec) const {
+		constexpr bool operator!=(const Vector4_t& vec) const {
 			return !operator==(vec);
 		}
 
 		/// <summary>
 		/// Obtiene la posición del rectángulo (X, Y).
 		/// </summary>
-		Vector2_t<T> GetRectanglePosition() const {
+		constexpr Vector2_t<T> GetRectanglePosition() const {
 			return Vector2_t<T>(x, y);
 		}
 
 		/// <summary>
 		/// Obtiene el tamaño del rectángulo (Z, W).
 		/// </summary>
-		Vector2_t<T> GetRectangleSize() const {
+		constexpr Vector2_t<T> GetRectangleSize() const {
 			return Vector2_t<T>(z, w);
 		}
 
 		/// <summary>
 		/// Obtiene la anchura del rectángulo (Z).
 		/// </summary>
-		inline T GetRectangleWidth() const {
+		constexpr inline T GetRectangleWidth() const {
 			return z;
 		}
 
 		/// <summary>
 		/// Obtiene la altura del rectángulo (W).
 		/// </summary>
-		inline T GetRectangleHeight() const {
+		constexpr inline T GetRectangleHeight() const {
 			return w;
 		}
 
 		/// <summary>
 		/// Obtiene el tope del rectángulo (Y + W).
 		/// </summary>
-		inline T GetRectangleTop() const {
+		constexpr inline T GetRectangleTop() const {
 			return y + w;
 		}
 
 		/// <summary>
 		/// Obtiene el lateral derecho del tectángulo (X + Z).
 		/// </summary>
-		inline T GetRectangleRight() const {
+		constexpr inline T GetRectangleRight() const {
 			return x + z;
 		}
 
 		/// <summary>
 		/// Punto central del rectángulo.
 		/// </summary>
-		Vector2_t<T> GetRectangleMiddlePoint() const {
+		constexpr Vector2_t<T> GetRectangleMiddlePoint() const {
 			return Vector2_t<T>(x + GetRectangleWidth() / 2, y + GetRectangleHeight() / 2);
 		}
 
 		/// <summary>
 		/// Retorna 'true' si los dos rectángulos se tocan.
 		/// </summary>
-		inline bool Intersects(const Vector4_t& vec) const {
+		constexpr inline bool Intersects(const Vector4_t& vec) const {
 			return x < vec.x + vec.z && x + z > vec.x && y < vec.y + vec.w && w + y > vec.y;
 		}
 
 		/// @brief Comrpueba si un punto está dentro del rectángulo.
 		/// @param point Posición del punto.
 		/// @return True si está contenido dentro del rectángulo.
-		inline constexpr bool ContainsPoint(const Vector2_t<T>& point) const {
+		constexpr inline bool ContainsPoint(const Vector2_t<T>& point) const {
 			return x <= point.x && y <= point.y && x + z >= point.x && y + w >= point.y;
 		}
 
 		/// <summary>
 		/// OSK::Vector4 a glm::vec4.
 		/// </summary>
-		inline glm::vec4 ToGLM() const {
+		constexpr inline glm::vec4 ToGLM() const {
 			return glm::vec4(x, y, z, w);
 		}
 
 		/// <summary>
 		/// OSK::Vector4 a glm::vec.
 		/// </summary>
-		inline glm::vec<4, T> ToGLM_T() const {
+		constexpr inline glm::vec<4, T> ToGLM_T() const {
 			return glm::vec<4, T>(x, y, z, w);
 		}
 
@@ -293,35 +293,35 @@ namespace OSK {
 		/// Devuelve un vector con variables de distinto tipo.
 		/// P = nuevo tipo de las variables.
 		/// </summary>
-		template <typename P> inline Vector4_t<P> ToVec4() const {
+		template <typename P> constexpr inline Vector4_t<P> ToVec4() const {
 			return Vector4_t<P>((P)x, (P)y, (P)z, (P)w);
 		}
 
 		/// <summary>
 		/// Devuelve un Vector4f a partir de este.
 		/// </summary>
-		inline Vector4_t<float_t> ToVector4f() const {
+		constexpr inline Vector4_t<float_t> ToVector4f() const {
 			return ToVec4<float>();
 		}
 
 		/// <summary>
 		/// Devuelve un Vector4d a partir de este.
 		/// </summary>
-		inline Vector4_t<double_t> ToVector4d() const {
+		constexpr inline Vector4_t<double_t> ToVector4d() const {
 			return ToVec4<double_t>();
 		}
 
 		/// <summary>
 		/// Devuelve un Vector4i a partir de este.
 		/// </summary>
-		inline Vector4_t<int32_t> ToVector4i() const {
+		constexpr inline Vector4_t<int32_t> ToVector4i() const {
 			return ToVec4<int32_t>();
 		}
 
 		/// <summary>
 		/// Devuelve un Vector4ui a partir de este.
 		/// </summary>
-		inline Vector4_t<uint32_t> ToVector4ui() const {
+		constexpr inline Vector4_t<uint32_t> ToVector4ui() const {
 			return ToVec4<uint32_t>();
 		}
 
