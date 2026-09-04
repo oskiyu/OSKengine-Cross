@@ -20,7 +20,6 @@ void OSK::GRAPHICS::ISdfRenderer2D::End() {
 
 OSK::DynamicArray<OSK::GRAPHICS::SdfDrawCall2D> OSK::GRAPHICS::ISdfRenderer2D::GetTextDrawCalls(const SdfStringInfo& textInfo) {
 	const auto defaultChar = textInfo.font->characters.at('A');
-
 	DynamicArray<SdfDrawCall2D> output = DynamicArray<SdfDrawCall2D>::CreateReserved(textInfo.text.size());
 
 	const GpuImageViewConfig viewConfig = GpuImageViewConfig::CreateSampled_SingleMipLevel(0);
@@ -56,7 +55,7 @@ OSK::DynamicArray<OSK::GRAPHICS::SdfDrawCall2D> OSK::GRAPHICS::ISdfRenderer2D::G
 		const float sizeY = character.size.y;
 
 		const float posX = currentX + character.bearing.x;
-		const float posY = currentY - (character.bearing.y);
+		const float posY = currentY - character.bearing.y;
 
 
 		SdfDrawCall2D drawCall{};
