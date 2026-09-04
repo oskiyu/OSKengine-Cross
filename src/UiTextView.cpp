@@ -25,7 +25,7 @@ void TextView::AdjustSizeToText() {
 
 
 	float totalSizeX = 0.0f;
-	float totalSizeY = 0.0f;
+	float totalSizeY = referenceChar.size.y + referenceChar.bearing.y;
 
 	float currentSizeX = 0.0f;
 	float currentLineStartY = 0.0f;
@@ -107,7 +107,6 @@ void TextView::Render(ISdfRenderer2D* renderer) const {
 	}
 
 	Vector2f globalPosition = GetContentTopLeftPosition();
-	globalPosition.y += GetContentSize().y;
 	globalPosition = globalPosition.ToVector2i().ToVector2f();
 
 	SdfStringInfo info{};
