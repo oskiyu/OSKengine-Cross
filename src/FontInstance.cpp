@@ -49,5 +49,5 @@ Vector2f FontInstance::GetTextSize(std::string_view string) const {
 
 	sizeX = glm::max(sizeX, temporalSizeX);
 
-	return Vector2f(sizeX, reference.size.y * fontSize);
+	return Vector2f(sizeX, reference.size.y + reference.bearing.y);
 }

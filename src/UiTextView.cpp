@@ -108,6 +108,7 @@ void TextView::Render(ISdfRenderer2D* renderer) const {
 
 	Vector2f globalPosition = GetContentTopLeftPosition();
 	globalPosition = globalPosition.ToVector2i().ToVector2f();
+	globalPosition.y += font->GetExistingInstance(fontSize).characters.at('A').bearing.y;
 
 	SdfStringInfo info{};
 	info.text = text;

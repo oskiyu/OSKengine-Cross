@@ -160,7 +160,8 @@ namespace OSK::UI {
 		/// @param relativePosition Posición (en píxeles).
 		virtual void _SetPosition(const Vector2f& newPosition);
 
-		/// @return Posición, en píxeles.
+		/// @return Posición, en píxeles,
+		/// de la esquina superior izquierda.
 		Vector2f GetPosition() const;
 
 

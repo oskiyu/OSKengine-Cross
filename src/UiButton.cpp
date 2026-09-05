@@ -204,20 +204,20 @@ Vector2f Button::GetTextRelativePosition() const {
 		relativePosition.x = 0;
 	}
 	else if (EFTraits::HasFlag(anchor, OSK::UI::Anchor::RIGHT)) {
-		relativePosition.x = GetPosition().x - m_buttonText.GetSize().x;
+		relativePosition.x = GetSize().x - m_buttonText.GetSize().x;
 	}
 	else if (EFTraits::HasFlag(anchor, OSK::UI::Anchor::CENTER_X)) {
 		relativePosition.x = GetSize().x * 0.5f - m_buttonText.GetSize().x * 0.5f;
 	}
 
 	if (EFTraits::HasFlag(anchor, OSK::UI::Anchor::BOTTOM)) {
-		relativePosition.y = GetPosition().y - m_buttonText.GetSize().y;
+		relativePosition.y = -GetSize().y + m_buttonText.GetSize().y;
 	}
 	else if (EFTraits::HasFlag(anchor, OSK::UI::Anchor::TOP)) {
 		relativePosition.y = 0;
 	}
 	else if (EFTraits::HasFlag(anchor, OSK::UI::Anchor::CENTER_Y)) {
-		relativePosition.y = GetSize().y * 0.5f - m_buttonText.GetSize().y * 0.5f;
+		relativePosition.y = -GetSize().y * 0.5f + m_buttonText.GetSize().y * 0.5f;
 	}
 
 	return relativePosition;
