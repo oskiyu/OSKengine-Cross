@@ -13,6 +13,7 @@
 #include "IKeyboardInput.h"
 #include "IMouseInput.h"
 #include "IGamepadInput.h"
+#include "ITouchInput.h"
 
 #include "GameExceptions.h"
 #include "GpuImageLayout.h"
@@ -284,6 +285,12 @@ void IGame::UpdateUi() {
 		const Vector2f position = mouse->GetMouseState().GetPosition().ToVector2f();
 
 		GetRootUiElement().UpdateByCursor(position, isPressed);
+	}
+
+	if (const auto* touch = GetTouchs()) {
+		for (const auto& t : touch->GetCurrentFrameInputs()) {
+			GetRootUiElement().UpdateByCursor(t.position, true);
+		}
 	}
 
 	if (const auto* keyboard = GetKeyboard()) {
