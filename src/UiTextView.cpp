@@ -17,15 +17,15 @@ using namespace OSK::ASSETS;
 using namespace OSK::GRAPHICS;
 
 void TextView::AdjustSizeToText() {
-	if (!font.GetAsset())
+	if (!font.GetAsset()) {
 		return;
+	}
 
 	const FontInstance& fontInstance = font->GetInstance(fontSize);
 	const FontCharacter& referenceChar = fontInstance.characters.at('A');
 
-
 	float totalSizeX = 0.0f;
-	float totalSizeY = referenceChar.size.y + referenceChar.bearing.y;
+	float totalSizeY = referenceChar.size.y;
 
 	float currentSizeX = 0.0f;
 	float currentLineStartY = 0.0f;
@@ -36,16 +36,16 @@ void TextView::AdjustSizeToText() {
 	for (const char c : text) {
 		if (c == '\n') {
 			totalSizeX = glm::max(totalSizeX, currentSizeX);
-
 			currentSizeX = 0.0f;
+
 			currentLineStartY = totalSizeY;
 			totalSizeY += referenceChar.size.y + referenceChar.bearing.y;
 
 			continue;
 		}
+
 		if (c == '\t') {
 			currentSizeX += (fontInstance.characters.at(c).advance >> 6) * 4;
-
 			continue;
 		}
 
@@ -61,13 +61,12 @@ void TextView::AdjustSizeToText() {
 	}
 
 	totalSizeX = glm::max(totalSizeX, currentSizeX);
-	totalSizeY = glm::max(totalSizeY, currentLineStartY + (currentLineBottom - currentLineTop));
-
+	
 	const Vector2f newSize = Vector2f(
 		totalSizeX,
 		totalSizeY
 	);
-
+	
 	SetSize(newSize + Vector2f(
 		GetPadding().x + GetPadding().z,
 		GetPadding().y + GetPadding().w
