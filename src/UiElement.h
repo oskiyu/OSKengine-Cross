@@ -125,7 +125,7 @@ namespace OSK::UI {
 		/// Y -> padding superior.
 		/// Z -> padding derecho.
 		/// W -> padding inferior.
-		void SetPadding(const Vector4f& padding);
+		virtual void SetPadding(const Vector4f& padding);
 
 
 		/// @brief Establece los márgenes externos.

@@ -34,6 +34,7 @@ namespace OSK::UI {
 		/// @param font Fuente del texto.
 		void SetFont(ASSETS::AssetRef<ASSETS::Font> font);
 
+		void SetPadding(const Vector4f& padding) override;
 
 		/// @return Fuente usada por el text view.
 		/// Puede ser null.
@@ -58,6 +59,8 @@ namespace OSK::UI {
 		std::string text = "";
 		ASSETS::AssetRef<ASSETS::Font> font;
 		USize32 fontSize = 12;
+
+		std::optional<Vector2f> m_textSize = std::nullopt;
 
 	};
 

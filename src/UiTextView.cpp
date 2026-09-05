@@ -67,10 +67,23 @@ void TextView::AdjustSizeToText() {
 		totalSizeY
 	);
 	
+	m_textSize = newSize;
+
 	SetSize(newSize + Vector2f(
 		GetPadding().x + GetPadding().z,
 		GetPadding().y + GetPadding().w
 	));
+}
+
+void TextView::SetPadding(const Vector4f& padding) {
+	IElement::SetPadding(padding);
+
+	if (m_textSize) {
+		SetSize(*m_textSize + Vector2f(
+			GetPadding().x + GetPadding().z,
+			GetPadding().y + GetPadding().w
+		));
+	}
 }
 
 void TextView::SetFontSize(USize32 size) {

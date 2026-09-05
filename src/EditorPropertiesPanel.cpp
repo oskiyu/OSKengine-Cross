@@ -17,7 +17,7 @@ OSK::Editor::UI::PropertiesPanel::PropertiesPanel(const Vector2f& size) : OSK::U
 
 	m_subtitle = new OSK::UI::TextView(textSize);
 	m_subtitle->SetMargin(Vector4f(5.0f));
-	m_subtitle->SetPadding(Vector2f(5.0f));
+	m_subtitle->SetPadding(Vector4f(5.0f));
 	m_subtitle->SetFont(Engine::GetAssetManager()->Load<OSK::ASSETS::Font>("Resources/Assets/Fonts/font1.json"));
 	m_subtitle->SetFontSize(Constants::SubtitleFontSize);
 

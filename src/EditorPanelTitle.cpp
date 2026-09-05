@@ -15,7 +15,7 @@ OSK::Editor::UI::EditorPanelTitle::EditorPanelTitle(const Vector2f& size) : OSK:
 
 	m_title = new OSK::UI::TextView(textSize);
 	m_title->SetMargin(Vector4f(0.0f));
-	m_title->SetPadding(Vector2f(5.0f));
+	m_title->SetPadding(Vector4f(5.0f));
 	m_title->SetFont(editorFont);
 	m_title->SetFontSize(Constants::TitleFontSize);
 	m_title->SetText("Objetos");
@@ -35,7 +35,7 @@ OSK::Editor::UI::EditorPanelTitle::EditorPanelTitle(const Vector2f& size) : OSK:
 
 	AddChild("title", UniquePtr<OSK::UI::IElement>(m_title));
 
-	// Línea.
+	// LÃ­nea.
 	{
 		GRAPHICS::SdfDrawCall2D titleLineDrawCall{};
 		titleLineDrawCall.contentType = GRAPHICS::SdfDrawCallContentType2D::COLOR_FLAT;
