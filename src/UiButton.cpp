@@ -210,14 +210,14 @@ Vector2f Button::GetTextRelativePosition() const {
 		relativePosition.x = GetSize().x * 0.5f - m_buttonText.GetSize().x * 0.5f;
 	}
 
-	if (EFTraits::HasFlag(anchor, OSK::UI::Anchor::BOTTOM)) {
-		relativePosition.y = -GetSize().y + m_buttonText.GetSize().y;
-	}
-	else if (EFTraits::HasFlag(anchor, OSK::UI::Anchor::TOP)) {
+	if (EFTraits::HasFlag(anchor, OSK::UI::Anchor::TOP)) {
 		relativePosition.y = 0;
 	}
 	else if (EFTraits::HasFlag(anchor, OSK::UI::Anchor::CENTER_Y)) {
-		relativePosition.y = -GetSize().y * 0.5f + m_buttonText.GetSize().y * 0.5f;
+		relativePosition.y = GetSize().y * 0.5f - m_buttonText.GetSize().y * 0.5f;
+	}
+	else if (EFTraits::HasFlag(anchor, OSK::UI::Anchor::BOTTOM)) {
+		relativePosition.y = GetSize().y - m_buttonText.GetSize().y;
 	}
 
 	return relativePosition;
