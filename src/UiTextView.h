@@ -54,13 +54,17 @@ namespace OSK::UI {
 		/// @note No renderizará el texto al no ser que se haya establecido la fuente.
 		void Render(GRAPHICS::ISdfRenderer2D* renderer) const override;
 
+		void OnSizeChanged(const Vector2f& previousSize) override;
+
 	private:
 
 		std::string text = "";
 		ASSETS::AssetRef<ASSETS::Font> font;
 		USize32 fontSize = 12;
+		float m_resizedFontSize = 12;
 
 		std::optional<Vector2f> m_textSize = std::nullopt;
+		mutable bool m_hasBeenResizedThisFrame = false;
 
 	};
 

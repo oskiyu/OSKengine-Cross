@@ -2,6 +2,9 @@
 
 #include "UnreachableException.h"
 
+#include "OSKengine.h"
+#include "Logger.h"
+
 using namespace OSK;
 using namespace OSK::UI;
 using namespace OSK::ASSETS;
@@ -25,11 +28,23 @@ void Button::SetTextAnchor(OSK::UI::Anchor anchor) {
 }
 
 void Button::SetSize(Vector2f size) {
-	IElement::SetSize(size);
+	if (KeepsRelativeSize()) {
+		const auto sizeDiff = m_buttonText.GetSize() / GetSize();
+		m_buttonText   .SetKeepRelativeSize(true);
+		m_buttonText   .SetSize(size * sizeDiff);
+		m_buttonText   .AdjustSizeToText();
+		m_defaultImage .SetSize(size);
+		m_selectedImage.SetSize(size);
+		m_pressedImage .SetSize(size);
 
-	m_defaultImage.SetSize(size);
-	m_selectedImage.SetSize(size);
-	m_pressedImage.SetSize(size);
+	}
+	else{
+		m_buttonText.SetKeepRelativeSize(false);
+	}
+
+	_SetPosition(GetPosition());
+
+	IElement::SetSize(size);
 }
 
 void Button::Render(ISdfRenderer2D* renderer) const {
@@ -121,6 +136,7 @@ void Button::SetTextFont(ASSETS::AssetRef<ASSETS::Font> font) {
 void Button::SetTextFontSize(USize32 fontSize) {
 	m_buttonText.SetFontSize(fontSize);
 	m_buttonText.AdjustSizeToText();
+	Engine::GetLogger()->Log(IO::LogLevel::L_DEBUG, "Font size: ", fontSize);
 }
 
 DynamicArray<GRAPHICS::SdfDrawCall2D>& Button::GetDrawCalls(State state) {

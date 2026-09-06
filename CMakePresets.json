@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 3,
   "configurePresets": [
     {
       "name": "base",
@@ -31,7 +31,7 @@
         "OSK_PLATFORM": "OSK_LINUX",
         "CMAKE_C_COMPILER": "clang",
         "CMAKE_CXX_COMPILER": "clang++",
-        "CMAKE_BUILD_WITH_INSTALL_RPATH":  "ON"
+        "CMAKE_BUILD_WITH_INSTALL_RPATH": "ON"
       }
     },
 

@@ -10,6 +10,9 @@
 #include "SdfBindlessRenderer2D.h"
 #include "GameObject.h"
 
+#include "OSKengine.h"
+#include "Logger.h"
+
 using namespace OSK;
 using namespace OSK::UI;
 using namespace OSK::ECS;
@@ -21,7 +24,7 @@ void TextView::AdjustSizeToText() {
 		return;
 	}
 
-	const FontInstance& fontInstance = font->GetInstance(fontSize);
+	const FontInstance& fontInstance = font->GetInstance(m_resizedFontSize);
 	const FontCharacter& referenceChar = fontInstance.characters.at('A');
 
 	float totalSizeX = 0.0f;
@@ -68,11 +71,9 @@ void TextView::AdjustSizeToText() {
 	);
 	
 	m_textSize = newSize;
+	m_hasBeenResizedThisFrame = true;
 
-	SetSize(newSize + Vector2f(
-		GetPadding().x + GetPadding().z,
-		GetPadding().y + GetPadding().w
-	));
+	SetSize(newSize + GetPadding2D());
 }
 
 void TextView::SetPadding(const Vector4f& padding) {
@@ -88,6 +89,7 @@ void TextView::SetPadding(const Vector4f& padding) {
 
 void TextView::SetFontSize(USize32 size) {
 	fontSize = size;
+	m_resizedFontSize = size;
 	font->LoadSizedFont(size);
 }
 
@@ -120,13 +122,39 @@ void TextView::Render(ISdfRenderer2D* renderer) const {
 
 	Vector2f globalPosition = GetContentTopLeftPosition();
 	globalPosition = globalPosition.ToVector2i().ToVector2f();
-	globalPosition.y += font->GetExistingInstance(fontSize).characters.at('A').bearing.y;
+	globalPosition.y += font->GetExistingInstance(m_resizedFontSize).characters.at('A').bearing.y;
 
 	SdfStringInfo info{};
 	info.text = text;
-	info.font = &font->GetExistingInstance(fontSize);
+	info.font = &font->GetExistingInstance(m_resizedFontSize);
 	info.transform = Transform2D(EMPTY_GAME_OBJECT);
 	info.transform.SetPosition(globalPosition);
 
 	renderer->Draw(info);
+
+	m_hasBeenResizedThisFrame = false;
+}
+
+void TextView::OnSizeChanged(const Vector2f& previousSize) {
+	if (!KeepsRelativeSize()) {
+		return;
+	}
+
+	const auto contentSize = GetSize() - GetPadding2D();
+	const auto previousContentSize = previousSize - GetPadding2D();
+
+	const float ratioY = contentSize.y / previousContentSize.y;
+
+	m_resizedFontSize = static_cast<float>(m_resizedFontSize) * ratioY;
+	
+	font->LoadSizedFont(m_resizedFontSize);
+
+	if (m_textSize && !m_hasBeenResizedThisFrame) {
+		m_hasBeenResizedThisFrame = true;
+		AdjustSizeToText();
+	}
+
+	// Esto lo último, para que las draw calls
+	// tengan el tamaño actualizado.
+	IElement::OnSizeChanged(previousSize);
 }
