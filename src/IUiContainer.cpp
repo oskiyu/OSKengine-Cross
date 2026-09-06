@@ -82,10 +82,10 @@ bool IContainer::UpdateByCursor(Vector2f cursorPosition, bool isPressed) {
 	}
 
 	for (auto& child : m_children) {
-		bool processed = child->UpdateByCursor(cursorPosition, isPressed);
-
-		if (processed)
+		const bool processed = child->UpdateByCursor(cursorPosition, isPressed);
+		if (processed && isPressed) {
 			return true;
+		}
 	}
 
 	return false;

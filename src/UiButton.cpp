@@ -78,6 +78,8 @@ bool Button::UpdateByCursor(Vector2f cursor, bool isPressed) {
 			m_currentState = State::DEFAULT;
 		}
 
+		m_wasPreviousFramePressed = false;
+
 		return false;
 	}
 
@@ -85,8 +87,9 @@ bool Button::UpdateByCursor(Vector2f cursor, bool isPressed) {
 		? State::PRESSED
 		: State::SELECTED;
 	
-	if (isPressed && !m_wasPreviousFramePressed)
+	if (isPressed && !m_wasPreviousFramePressed) {
 		Click();
+	}
 
 	m_wasPreviousFramePressed = isPressed;
 

@@ -291,6 +291,10 @@ void IGame::UpdateUi() {
 		for (const auto& t : touch->GetCurrentFrameInputs()) {
 			GetRootUiElement().UpdateByCursor(t.position, true);
 		}
+
+		if (touch->GetCurrentFrameInputs().IsEmpty()) {
+			GetRootUiElement().UpdateByCursor(Vector2f::Zero, false);
+		}
 	}
 
 	if (const auto* keyboard = GetKeyboard()) {
