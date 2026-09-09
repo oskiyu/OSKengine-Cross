@@ -59,6 +59,7 @@
       "cacheVariables": {
         "OSK_PLATFORM": "OSK_ANDROID",
         "VCPKG_TARGET_TRIPLET": "arm64-android",
+        "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": {
           "value": "$env{ANDROID_NDK}/build/cmake/android.toolchain.cmake",
           "type": "FILEPATH"
