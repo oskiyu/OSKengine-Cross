@@ -24,56 +24,48 @@ void TextView::AdjustSizeToText() {
 		return;
 	}
 
-	const FontInstance& fontInstance = font->GetInstance(m_resizedFontSize);
-	const FontCharacter& referenceChar = fontInstance.characters.at('A');
-
-	float totalSizeX = 0.0f;
-	float totalSizeY = referenceChar.size.y;
+	const auto& fontInstance = font->GetInstance(m_resizedFontSize);
+	const auto& referenceChar = fontInstance.characters.at('A');
 
 	float currentSizeX = 0.0f;
-	float currentLineStartY = 0.0f;
-
-	float currentLineTop = 0.0f;
-	float currentLineBottom = 0.0f;
+	float totalSizeX = 0.0f;
+	float totalSizeY = referenceChar.size.y;
 
 	for (const char c : text) {
 		if (c == '\n') {
 			totalSizeX = glm::max(totalSizeX, currentSizeX);
 			currentSizeX = 0.0f;
-
-			currentLineStartY = totalSizeY;
 			totalSizeY += referenceChar.size.y + referenceChar.bearing.y;
 
 			continue;
 		}
 
 		if (c == '\t') {
-			currentSizeX += (fontInstance.characters.at(c).advance >> 6) * 4;
+			currentSizeX += (referenceChar.advance >> 6) * 4;
 			continue;
 		}
 
-		const FontCharacter& character = fontInstance.characters.at(c);
+		if (c == ' ') {
+			currentSizeX += (referenceChar.advance >> 6);
+			continue;
+		}
 
-		const float characterTop = -character.bearing.y;
-		const float characterBottom = characterTop + character.size.y;
-		
-		currentLineTop = glm::min(currentLineTop, characterTop);
-		currentLineBottom = glm::max(currentLineBottom, characterBottom);
-
-		currentSizeX += character.advance >> 6;
+		currentSizeX += fontInstance.characters.at(c).advance >> 6;
 	}
 
 	totalSizeX = glm::max(totalSizeX, currentSizeX);
 	
-	const Vector2f newSize = Vector2f(
+	m_textSize = Vector2f(
 		totalSizeX,
 		totalSizeY
 	);
-	
-	m_textSize = newSize;
-	m_hasBeenResizedThisFrame = true;
 
-	SetSize(newSize + GetPadding2D());
+	const auto previousSize = m_size;
+	m_size = *m_textSize + GetPadding2D();
+
+	// Esto lo último, para que las draw calls
+	// tengan el tamaño actualizado.
+	IElement::OnSizeChanged(previousSize);
 }
 
 void TextView::SetPadding(const Vector4f& padding) {
@@ -131,30 +123,27 @@ void TextView::Render(ISdfRenderer2D* renderer) const {
 	info.transform.SetPosition(globalPosition);
 
 	renderer->Draw(info);
-
-	m_hasBeenResizedThisFrame = false;
 }
 
-void TextView::OnSizeChanged(const Vector2f& previousSize) {
-	if (!KeepsRelativeSize()) {
-		return;
+void TextView::SetSize(Vector2f size) {
+	const auto previousSize = GetSize();
+
+	if (KeepsRelativeSize()) {
+		const auto contentSize = size - GetPadding2D();
+		const auto previousContentSize = previousSize - GetPadding2D();
+
+		const float ratioY = contentSize.y / previousContentSize.y;
+
+		m_resizedFontSize = static_cast<float>(m_resizedFontSize) * ratioY;
+
+		font->LoadSizedFont(m_resizedFontSize);
+
+		if (m_textSize) {
+			AdjustSizeToText(); // Aquí se hace el m_size = size;
+		}
 	}
-
-	const auto contentSize = GetSize() - GetPadding2D();
-	const auto previousContentSize = previousSize - GetPadding2D();
-
-	const float ratioY = contentSize.y / previousContentSize.y;
-
-	m_resizedFontSize = static_cast<float>(m_resizedFontSize) * ratioY;
-	
-	font->LoadSizedFont(m_resizedFontSize);
-
-	if (m_textSize && !m_hasBeenResizedThisFrame) {
-		m_hasBeenResizedThisFrame = true;
-		AdjustSizeToText();
+	else {
+		m_size = size;
+		IElement::OnSizeChanged(previousSize);
 	}
-
-	// Esto lo último, para que las draw calls
-	// tengan el tamaño actualizado.
-	IElement::OnSizeChanged(previousSize);
 }

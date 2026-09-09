@@ -269,12 +269,13 @@ namespace OSK::UI {
 		/// @return True si tiene un elemento padre.
 		bool HasParent() const;
 
+		/// @brief Tamaño, en píxeles.
+		Vector2f m_size = Vector2f::Zero;
+
 	private:
 
 		DynamicArray<GRAPHICS::SdfDrawCall2D> m_drawCalls{};
 
-		/// @brief Tamaño, en píxeles.
-		Vector2f m_size = Vector2f::Zero;
 		Anchor m_anchor = Anchor::DEFAULT;
 
 		/// @brief Posición , en píxeles.

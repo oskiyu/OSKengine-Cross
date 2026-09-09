@@ -35,19 +35,16 @@ OSK::DynamicArray<OSK::GRAPHICS::SdfDrawCall2D> OSK::GRAPHICS::ISdfRenderer2D::G
 		if (c == '\n') {
 			currentY += defaultChar.size.y + defaultChar.bearing.y;
 			currentX = originalPosition.x;
-
 			continue;
 		}
 
 		if (c == '\t') {
 			currentX += (defaultChar.advance >> 6) * 4; // Font::SPACES_PER_TAB;
-
 			continue;
 		}
 
 		if (c == ' ') {
 			currentX += (defaultChar.advance >> 6);
-
 			continue;
 		}
 
