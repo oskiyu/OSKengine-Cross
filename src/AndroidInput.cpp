@@ -47,15 +47,17 @@ int32_t AndroidInput::HandleInputEvent(android_app* app, AInputEvent* event) {
 		case AMOTION_EVENT_ACTION_POINTER_DOWN:
 		case AMOTION_EVENT_ACTION_DOWN:
 		case AMOTION_EVENT_ACTION_MOVE:
-			TouchInput input{};
-			input.position.x = AMotionEvent_getX(event, ptrIndex);
-			input.position.y = AMotionEvent_getY(event, ptrIndex);
-			input.inputId = TouchInputUuid(AMotionEvent_getPointerId(event, ptrIndex));
+			for (USize32 i = 0; i < pointerCount; i++) {
+				TouchInput input{};
+				input.position.x = AMotionEvent_getX(event, i);
+				input.position.y = AMotionEvent_getY(event, i);
+				input.inputId = TouchInputUuid(AMotionEvent_getPointerId(event, i));
 
-			input.timeSinceInputStart = 0.0f;  // @todo
-			input.type = TouchInputType::START; // @todo
-			
-			AndroidInput::m_self->m_inputCache[TouchInputUuid(AMotionEvent_getPointerId(event, ptrIndex))] = input;
+				input.timeSinceInputStart = 0.0f;  // @todo
+				input.type = TouchInputType::START; // @todo
+
+				AndroidInput::m_self->m_inputCache[TouchInputUuid(AMotionEvent_getPointerId(event, i))] = input;
+			}
 			break;
 		}
 		
